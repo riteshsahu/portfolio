@@ -4,8 +4,6 @@ import { cache } from "react";
 import styles from "./SnippetPreview.module.scss";
 
 interface SnippetPreviewProps extends Snippet {
-  code: string;
-  lang?: string;
   theme?: string;
 }
 

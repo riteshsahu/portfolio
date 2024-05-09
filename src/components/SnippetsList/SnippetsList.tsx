@@ -3,10 +3,11 @@ import SnippetPreview from "../SnippetPreview";
 
 async function SnippetsList() {
   const snippets = await prisma.snippet.findMany();
+
   return (
     <div>
       {snippets.map((snippet) => (
-        <SnippetPreview key={snippet.id} {...snippet} code={snippet.body} />
+        <SnippetPreview key={snippet.id} {...snippet} />
       ))}
     </div>
   );
