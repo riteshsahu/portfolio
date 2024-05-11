@@ -3,7 +3,7 @@ import { handleUpdate } from "./UpdateSnippet.actions";
 import prisma from "@/lib/prisma";
 
 interface UpdateSnippetParams {
-  snippetId: string;
+  snippetId: string | number;
 }
 
 async function UpdateSnippet({ snippetId }: UpdateSnippetParams) {

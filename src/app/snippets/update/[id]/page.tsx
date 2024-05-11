@@ -1,5 +1,4 @@
 import UpdateSnippet from "@/components/UpdateSnippet";
-import { useParams } from "next/navigation";
 
 interface UpdateSnippetPageProps {
   params: { id: number };
