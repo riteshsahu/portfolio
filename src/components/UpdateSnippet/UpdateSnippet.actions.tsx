@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function handleUpdate(id: number, formData: FormData) {
+export async function handleUpdate(id: string, formData: FormData) {
   const data = {
     title: formData.get("title") as string,
     code: formData.get("code") as string,

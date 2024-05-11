@@ -1,4 +1,8 @@
+import { ROUTE_PATH } from "@/constants";
 import prisma from "@/lib/prisma";
+import { kebabCase } from "lodash";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 function AddSnippet() {
   async function handleFormSubmit(formData: FormData) {
@@ -11,7 +15,15 @@ function AddSnippet() {
     };
 
     if (data.title && data.code) {
-      await prisma.snippet.create({ data });
+      await prisma.snippet.create({
+        data: {
+          ...data,
+          slug: kebabCase(data.title),
+        },
+      });
+
+      revalidatePath(ROUTE_PATH.SNIPPETS);
+      redirect(ROUTE_PATH.SNIPPETS);
     }
   }
 

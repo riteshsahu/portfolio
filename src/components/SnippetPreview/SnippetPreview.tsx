@@ -20,6 +20,7 @@ async function SnippetPreview({
   lang = "js",
   theme = "one-dark-pro",
   id,
+  slug,
 }: SnippetPreviewProps) {
   const highlighter = await getHighlighter(lang, theme);
 
@@ -40,7 +41,7 @@ async function SnippetPreview({
           <Button>
             <FiCopy />
           </Button>
-          <Link href={getRoutePath(ROUTE_PATH.UPDATE_SNIPPET, { id })}>
+          <Link href={getRoutePath(ROUTE_PATH.UPDATE_SNIPPET, { slug })}>
             <FiEdit color="white" />
           </Link>
           <form action={handleDelete.bind(null, id)}>

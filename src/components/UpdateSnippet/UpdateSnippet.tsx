@@ -1,25 +1,18 @@
-import React from "react";
+import { Snippet } from "@prisma/client";
 import { handleUpdate } from "./UpdateSnippet.actions";
-import prisma from "@/lib/prisma";
 
-interface UpdateSnippetParams {
+interface UpdateSnippetParams extends Snippet {
   snippetId: string | number;
 }
 
-async function UpdateSnippet({ snippetId }: UpdateSnippetParams) {
-  const snippet = await prisma.snippet.findFirst({
-    where: { id: +snippetId },
-  });
-
-  if (!snippet) {
-    return;
-  }
+async function UpdateSnippet(props: UpdateSnippetParams) {
+  const { id, title, code } = props;
 
   return (
-    <form className="p-3" action={handleUpdate.bind(null, +snippetId)}>
+    <form className="p-3" action={handleUpdate.bind(null, id)}>
       <div>
         <input
-          defaultValue={snippet.title}
+          defaultValue={title}
           name="title"
           type="text"
           className="border-2 mb-2 w-1/2 h-10"
@@ -27,7 +20,7 @@ async function UpdateSnippet({ snippetId }: UpdateSnippetParams) {
       </div>
       <div>
         <textarea name="code" className="border-2 w-1/2 min-h-32">
-          {snippet.code}
+          {code}
         </textarea>
       </div>
       <button className="border-2" type="submit">
