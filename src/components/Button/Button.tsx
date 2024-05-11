@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React from "react";
 
-interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {}
+type ButtonProps = React.ComponentProps<"button">;
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, ...props }, ref) => {

@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import React from "react";
 
 function AddSnippet() {
   async function handleFormSubmit(formData: FormData) {

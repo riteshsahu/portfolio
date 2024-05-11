@@ -1,7 +1,14 @@
 import { Snippet } from "@prisma/client";
+import Link from "next/link";
+import { cache, startTransition } from "react";
+import { FiCopy, FiEdit, FiTrash } from "react-icons/fi";
 import { getHighlighter as shikiGetHighlighter } from "shiki";
-import { cache } from "react";
+import Button from "../Button";
+import { handleDelete } from "./SnippetPreview.actions";
 import styles from "./SnippetPreview.module.scss";
+import SubmitButton from "../SubmitButton";
+import { getRoutePath } from "@/helpers/route.helpers";
+import { ROUTE_PATH } from "@/constants";
 
 interface SnippetPreviewProps extends Snippet {
   theme?: string;
@@ -12,6 +19,7 @@ async function SnippetPreview({
   code,
   lang = "js",
   theme = "one-dark-pro",
+  id,
 }: SnippetPreviewProps) {
   const highlighter = await getHighlighter(lang, theme);
 
@@ -23,10 +31,25 @@ async function SnippetPreview({
   return (
     <div>
       <div>{title}</div>
-      <div
-        className={styles.codeContainer}
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      <div className="relative">
+        <div
+          className={styles.codeContainer}
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+        <div className="flex flex-col absolute top-0 right-0 gap-2 p-2">
+          <Button>
+            <FiCopy />
+          </Button>
+          <Link href={getRoutePath(ROUTE_PATH.UPDATE_SNIPPET, { id })}>
+            <FiEdit color="white" />
+          </Link>
+          <form action={handleDelete.bind(null, id)}>
+            <SubmitButton>
+              <FiTrash />
+            </SubmitButton>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

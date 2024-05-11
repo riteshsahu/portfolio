@@ -1,6 +1,15 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ROUTE_PATH } from "@/constants";
+import Link from "next/link";
+
+const links = [
+  {
+    title: "Snippets",
+    path: ROUTE_PATH.SNIPPETS,
+  },
+];
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +25,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <header className="h-12 p-3 flex justify-between border-b-2">
+          <div>
+            <Link href={"/"}>Home</Link>
+          </div>
+          <nav>
+            <ul>
+              {links.map((link) => (
+                <li key={link.title}>
+                  <Link href={link.path}>{link.title}</Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </header>
+        {children}
+      </body>
     </html>
   );
 }
