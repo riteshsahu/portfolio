@@ -37,7 +37,7 @@ async function SnippetPreview({
           className={styles.codeContainer}
           dangerouslySetInnerHTML={{ __html: html }}
         />
-        <div className="flex flex-col absolute top-0 right-0 gap-2 p-2">
+        <div className="absolute right-0 top-0 flex flex-col gap-2 p-2">
           <Button>
             <FiCopy />
           </Button>

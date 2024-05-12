@@ -30,10 +30,10 @@ function AddSnippet() {
   return (
     <form action={handleFormSubmit}>
       <div>
-        <input name="title" type="text" className="border-2 mb-2 w-1/2" />
+        <input name="title" type="text" className="mb-2 w-1/2 border-2" />
       </div>
       <div>
-        <textarea name="code" className="border-2 w-1/2"></textarea>
+        <textarea name="code" className="w-1/2 border-2"></textarea>
       </div>
       <button className="border-2" type="submit">
         Add Snippet

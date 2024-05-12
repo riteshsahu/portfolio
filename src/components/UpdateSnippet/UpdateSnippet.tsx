@@ -15,11 +15,11 @@ async function UpdateSnippet(props: UpdateSnippetParams) {
           defaultValue={title}
           name="title"
           type="text"
-          className="border-2 mb-2 w-1/2 h-10"
+          className="mb-2 h-10 w-1/2 border-2"
         />
       </div>
       <div>
-        <textarea name="code" className="border-2 w-1/2 min-h-32">
+        <textarea name="code" className="min-h-32 w-1/2 border-2">
           {code}
         </textarea>
       </div>

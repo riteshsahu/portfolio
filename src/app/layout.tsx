@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <header className="h-12 p-3 flex justify-between border-b-2">
+        <header className="flex h-12 justify-between border-b-2 p-3">
           <div>
             <Link href={"/"}>Home</Link>
           </div>
