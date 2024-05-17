@@ -12,6 +12,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@clerk/nextjs": "^5.0.12",
     "@prisma/client": "^5.13.0",
     "@types/lodash": "^4.17.1",
     "clsx": "^2.1.1",

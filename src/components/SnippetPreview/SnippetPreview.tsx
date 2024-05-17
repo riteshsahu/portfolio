@@ -9,6 +9,7 @@ import styles from "./SnippetPreview.module.scss";
 import SubmitButton from "../SubmitButton";
 import { getRoutePath } from "@/helpers/route.helpers";
 import { ROUTE_PATH } from "@/constants";
+import { auth } from "@clerk/nextjs/server";
 
 interface SnippetPreviewProps extends Snippet {
   theme?: string;
@@ -29,26 +30,29 @@ async function SnippetPreview({
     theme,
   });
 
+  const { userId } = auth();
+
   return (
     <div>
       <div>{title}</div>
       <div className="relative">
-        <div
-          className={styles.codeContainer}
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
+        <div className={styles.codeContainer} dangerouslySetInnerHTML={{ __html: html }} />
         <div className="absolute right-0 top-0 flex flex-col gap-2 p-2">
           <Button>
             <FiCopy />
           </Button>
-          <Link href={getRoutePath(ROUTE_PATH.UPDATE_SNIPPET, { slug })}>
-            <FiEdit color="white" />
-          </Link>
-          <form action={handleDelete.bind(null, id)}>
-            <SubmitButton>
-              <FiTrash />
-            </SubmitButton>
-          </form>
+          {userId && (
+            <>
+              <Link href={getRoutePath(ROUTE_PATH.UPDATE_SNIPPET, { slug })}>
+                <FiEdit color="white" />
+              </Link>
+              <form action={handleDelete.bind(null, id)}>
+                <SubmitButton>
+                  <FiTrash />
+                </SubmitButton>
+              </form>
+            </>
+          )}
         </div>
       </div>
     </div>
