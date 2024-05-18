@@ -1,15 +1,15 @@
+import { ROUTE_PATH } from "@/constants";
+import { getRoutePath } from "@/helpers/route.helpers";
+import { auth } from "@clerk/nextjs/server";
 import { Snippet } from "@prisma/client";
 import Link from "next/link";
-import { cache, startTransition } from "react";
+import { cache } from "react";
 import { FiCopy, FiEdit, FiTrash } from "react-icons/fi";
 import { getHighlighter as shikiGetHighlighter } from "shiki";
 import Button from "../Button";
+import SubmitButton from "../SubmitButton";
 import { handleDelete } from "./SnippetPreview.actions";
 import styles from "./SnippetPreview.module.scss";
-import SubmitButton from "../SubmitButton";
-import { getRoutePath } from "@/helpers/route.helpers";
-import { ROUTE_PATH } from "@/constants";
-import { auth } from "@clerk/nextjs/server";
 
 interface SnippetPreviewProps extends Snippet {
   theme?: string;

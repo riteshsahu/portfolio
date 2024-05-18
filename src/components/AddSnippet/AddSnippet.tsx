@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { kebabCase } from "lodash";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import SnippetEditor from "../SnippetEditor";
 
 function AddSnippet() {
   async function handleFormSubmit(formData: FormData) {
@@ -33,7 +34,7 @@ function AddSnippet() {
         <input name="title" type="text" className="mb-2 w-1/2 border-2" />
       </div>
       <div>
-        <textarea name="code" className="w-1/2 border-2"></textarea>
+        <SnippetEditor name="code" />
       </div>
       <button className="border-2" type="submit">
         Add Snippet
