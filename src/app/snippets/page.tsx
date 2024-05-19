@@ -1,9 +1,9 @@
 import SnippetsList from "@/components/SnippetsList";
 import Link from "next/link";
-import { auth } from "@clerk/nextjs/server";
+import { getAuth } from "@/lib/auth/server";
 
 export default function Home() {
-  const { userId } = auth();
+  const { userId } = getAuth();
 
   return (
     <main className="min-h-screen p-6">

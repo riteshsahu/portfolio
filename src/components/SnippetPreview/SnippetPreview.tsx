@@ -1,6 +1,5 @@
 import { ROUTE_PATH } from "@/constants";
 import { getRoutePath } from "@/helpers/route.helpers";
-import { auth } from "@clerk/nextjs/server";
 import { Snippet } from "@prisma/client";
 import Link from "next/link";
 import { cache } from "react";
@@ -10,6 +9,7 @@ import Button from "../Button";
 import SubmitButton from "../SubmitButton";
 import { handleDelete } from "./SnippetPreview.actions";
 import styles from "./SnippetPreview.module.scss";
+import { getAuth } from "@/lib/auth/server";
 
 interface SnippetPreviewProps extends Snippet {
   theme?: string;
@@ -30,10 +30,11 @@ async function SnippetPreview({
     theme,
   });
 
-  const { userId } = auth();
+  const auth = getAuth();
 
   return (
     <div>
+      <div>{auth.isAdmin ? "Admin" : "User"}</div>
       <div>{title}</div>
       <div className="relative">
         <div className={styles.codeContainer} dangerouslySetInnerHTML={{ __html: html }} />
@@ -41,7 +42,7 @@ async function SnippetPreview({
           <Button>
             <FiCopy />
           </Button>
-          {userId && (
+          {auth.isAdmin && (
             <>
               <Link href={getRoutePath(ROUTE_PATH.UPDATE_SNIPPET, { slug })}>
                 <FiEdit color="white" />
