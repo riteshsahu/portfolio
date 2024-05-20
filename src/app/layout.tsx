@@ -5,6 +5,7 @@ import { ROUTE_PATH } from "@/constants";
 import Link from "next/link";
 import { logout } from "@/lib/auth/actions";
 import { getAuth } from "@/lib/auth";
+import Button from "@/components/Button";
 
 const links = [
   {
@@ -36,7 +37,7 @@ export default async function RootLayout({
           </div>
           {auth?.user && (
             <form action={logout}>
-              <button type="submit">Logout</button>
+              <Button type="submit">Logout</Button>
             </form>
           )}
           <nav>
