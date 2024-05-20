@@ -5,7 +5,9 @@ type Params = {
   [key: string]: string | number;
 };
 
-export const getRoutePath = (path: ROUTE_PATH, params: Params = {}): Route => {
+type RoutePath = (typeof ROUTE_PATH)[keyof typeof ROUTE_PATH];
+
+export const getRoutePath = (path: RoutePath, params: Params = {}): Route => {
   const pathRegex = /\[(\w+)\]/g;
 
   return path.replace(pathRegex, (match, paramKey) => {

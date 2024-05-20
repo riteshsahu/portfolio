@@ -1,17 +1,14 @@
-import { useAuth as useClerkAuth, useUser as useClerkUser } from "@clerk/nextjs";
-import { isAdmin } from "./auth.helpers";
+import "server-only";
+import { cookies } from "next/headers";
+import { decryptJwt } from "./session";
 
-export function useAuth() {
-  const auth = useClerkAuth();
+// TODO: wrap this in React.cache()
+export const getAuth = async () => {
+  const sessionJwt = cookies().get("session")?.value;
+  if (!sessionJwt) return {};
+  const session = await decryptJwt(sessionJwt);
 
   return {
-    ...auth,
-    isAdmin: isAdmin(auth),
+    user: session.user,
   };
-}
-
-export function useUser() {
-  const user = useClerkUser();
-
-  return user;
-}
+};

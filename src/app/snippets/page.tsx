@@ -1,13 +1,13 @@
 import SnippetsList from "@/components/SnippetsList";
 import Link from "next/link";
-import { getAuth } from "@/lib/auth/server";
+import { getAuth } from "@/lib/auth";
 
-export default function Home() {
-  const { userId } = getAuth();
+export default async function Home() {
+  const auth = await getAuth();
 
   return (
     <main className="min-h-screen p-6">
-      {userId && <Link href={"/snippets/add"}>Add</Link>}
+      {auth.user && <Link href={"/snippets/add"}>Add</Link>}
       <div className="mb-5" />
       <SnippetsList />
     </main>

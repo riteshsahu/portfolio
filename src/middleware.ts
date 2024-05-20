@@ -1,21 +1,19 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { PUBLIC_ROUTES } from "@/constants";
-import { isAdmin } from "@/lib/auth/auth.helpers";
-import { NextResponse } from "next/server";
+import { PUBLIC_ROUTES, ROUTE_PATH } from "@/constants";
+import { NextRequest, NextResponse } from "next/server";
+import { getAuth } from "./lib/auth";
 
-const isPublicRoute = createRouteMatcher(PUBLIC_ROUTES);
+export default async function middleware(req: NextRequest) {
+  const auth = await getAuth();
+  const path: any = req.nextUrl.pathname;
+  // TODO: use route matcher
+  const isPublicRoute = PUBLIC_ROUTES.includes(path);
 
-export default clerkMiddleware((getAuth, req) => {
-  const auth = getAuth();
-
-  if (!isPublicRoute(req)) {
-    if (auth.userId && !isAdmin(auth)) {
-      return NextResponse.redirect(new URL("/", req.nextUrl));
-    } else {
-      auth.protect();
-    }
+  if (!isPublicRoute && !auth?.user) {
+    return NextResponse.redirect(new URL(ROUTE_PATH.HOME, req.nextUrl));
   }
-});
+
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],

@@ -9,7 +9,7 @@ import Button from "../Button";
 import SubmitButton from "../SubmitButton";
 import { handleDelete } from "./SnippetPreview.actions";
 import styles from "./SnippetPreview.module.scss";
-import { getAuth } from "@/lib/auth/server";
+import { getAuth } from "@/lib/auth";
 
 interface SnippetPreviewProps extends Snippet {
   theme?: string;
@@ -30,11 +30,10 @@ async function SnippetPreview({
     theme,
   });
 
-  const auth = getAuth();
+  const auth = await getAuth();
 
   return (
     <div>
-      <div>{auth.isAdmin ? "Admin" : "User"}</div>
       <div>{title}</div>
       <div className="relative">
         <div className={styles.codeContainer} dangerouslySetInnerHTML={{ __html: html }} />
@@ -42,7 +41,7 @@ async function SnippetPreview({
           <Button>
             <FiCopy />
           </Button>
-          {auth.isAdmin && (
+          {auth.user && (
             <>
               <Link href={getRoutePath(ROUTE_PATH.UPDATE_SNIPPET, { slug })}>
                 <FiEdit color="white" />
