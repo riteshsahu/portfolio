@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 "use client";
 import type { BundledLanguage, BundledTheme, Highlighter } from "shiki";
 import type { EditorPlugin } from "./plugins";
