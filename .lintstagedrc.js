@@ -1,12 +1,10 @@
 // https://nextjs.org/docs/app/building-your-application/configuring/eslint#lint-staged
-const path = require('path')
+const path = require("path");
 
 const buildEslintCommand = (filenames) =>
-  `next lint --fix --file ${filenames
-    .map((f) => path.relative(process.cwd(), f))
-    .join(' --file ')}`
+  `next lint --file ${filenames.map((f) => path.relative(process.cwd(), f)).join(" --file ")}`;
 
 module.exports = {
-  '*.{js,jsx,ts,tsx}': ["prettier --list-different", buildEslintCommand],
-  "*.{css,scss,json}": ["prettier --list-different"]
-}
+  "*.{js,jsx,ts,tsx}": ["prettier --write", buildEslintCommand],
+  "*.{css,scss,json}": ["prettier --write"],
+};
