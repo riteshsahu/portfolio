@@ -6,6 +6,7 @@ import Link from "next/link";
 import { logout } from "@/lib/auth/actions";
 import { getAuth } from "@/lib/auth";
 import Button from "@/components/Button";
+import clsx from "clsx";
 
 const links = [
   {
@@ -30,8 +31,8 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <header className="flex h-12 justify-between border-b-2 p-3">
+      <body className={clsx(inter.className, "bg-neutral-800 text-white")}>
+        <header className="flex h-12 justify-between border-b-2 border-black p-3">
           <div>
             <Link href={"/"}>Home</Link>
           </div>

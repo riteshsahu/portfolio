@@ -3,13 +3,13 @@ import { getRoutePath } from "@/helpers/route.helpers";
 import { Snippet } from "@prisma/client";
 import Link from "next/link";
 import { cache } from "react";
-import { FiCopy, FiEdit, FiTrash } from "react-icons/fi";
+import { FiEdit, FiTrash } from "react-icons/fi";
 import { getHighlighter as shikiGetHighlighter } from "shiki";
-import Button from "../Button";
 import SubmitButton from "../SubmitButton";
 import { handleDelete } from "./SnippetPreview.actions";
 import styles from "./SnippetPreview.module.scss";
 import { getAuth } from "@/lib/auth";
+import CopySnippetButton from "../CopySnippetButton";
 
 interface SnippetPreviewProps extends Snippet {
   theme?: string;
@@ -31,16 +31,19 @@ async function SnippetPreview({
   });
 
   const auth = await getAuth();
+  const snippetId = `snippet-${id}`;
 
   return (
     <div>
       <div>{title}</div>
       <div className="relative">
-        <div className={styles.codeContainer} dangerouslySetInnerHTML={{ __html: html }} />
+        <div
+          id={snippetId}
+          className={styles.codeContainer}
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
         <div className="absolute right-0 top-0 flex flex-col gap-2 p-2">
-          <Button>
-            <FiCopy />
-          </Button>
+          <CopySnippetButton snippetId={snippetId} />
           {auth.user && (
             <>
               <Link href={getRoutePath(ROUTE_PATH.UPDATE_SNIPPET, { slug })}>
