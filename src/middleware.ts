@@ -7,9 +7,18 @@ export default async function middleware(req: NextRequest) {
   const path: any = req.nextUrl.pathname;
   // TODO: use route matcher
   const isPublicRoute = PUBLIC_ROUTES.includes(path);
+  const isLoggedIn = !!auth.user;
 
-  if (!isPublicRoute && !auth?.user) {
-    return NextResponse.redirect(new URL(ROUTE_PATH.HOME, req.nextUrl));
+  if (!isLoggedIn) {
+    // not logged in
+    if (!isPublicRoute) {
+      return NextResponse.redirect(new URL(ROUTE_PATH.HOME, req.nextUrl));
+    }
+  } else {
+    // logged in
+    if (path === ROUTE_PATH.AUTH) {
+      return NextResponse.redirect(new URL(ROUTE_PATH.HOME, req.nextUrl));
+    }
   }
 
   return NextResponse.next();
