@@ -38,7 +38,9 @@ export function indentText(input: InputState, options: IndentOptions): Action {
   if (
     input.selectionStart !== input.selectionEnd &&
     (bothEndsSelected(input.value, input.selectionStart, input.selectionEnd) ||
-      input.value.slice(input.selectionStart, input.selectionEnd).includes("\n"))
+      input.value
+        .slice(input.selectionStart, input.selectionEnd)
+        .includes("\n"))
   ) {
     return blockIndentText(input, options);
   }
@@ -61,8 +63,14 @@ function simpleIndentText(input: InputState, options: IndentOptions): Action {
     };
   }
 
-  const [width_from_left] = visibleWidthFromLeft(value, selectionStart, tabSize);
-  const indent = " ".repeat(ceilTab(width_from_left + 1, tabSize) - width_from_left);
+  const [width_from_left] = visibleWidthFromLeft(
+    value,
+    selectionStart,
+    tabSize,
+  );
+  const indent = " ".repeat(
+    ceilTab(width_from_left + 1, tabSize) - width_from_left,
+  );
   return {
     patch: {
       value: indent,
@@ -83,7 +91,8 @@ function blockIndentText(input: InputState, options: IndentOptions): Action {
   const block = value.slice(block_start, block_end);
 
   const replacement = block.replaceAll(/^[ \t]*/gm, (leading, offset, str) => {
-    if (str[offset] === "\n" || str[offset] === "\r" || offset === block_end) return leading;
+    if (str[offset] === "\n" || str[offset] === "\r" || offset === block_end)
+      return leading;
 
     let [tab_width] = visibleWidthFromLeft(leading, leading.length, tabSize, 0);
     tab_width = ceilTab(tab_width + 1, tabSize);
@@ -114,7 +123,10 @@ function blockIndentText(input: InputState, options: IndentOptions): Action {
     const cursor_offset = selectionStart - line_start;
     const line = value.slice(line_start, selectionStart);
     const [, old_leading_offset] = visibleWidthLeadingSpace(line, tabSize);
-    const [, max_leading_offset] = visibleWidthLeadingSpace(replacement, tabSize);
+    const [, max_leading_offset] = visibleWidthLeadingSpace(
+      replacement,
+      tabSize,
+    );
 
     if (cursor_offset > old_leading_offset) {
       // |<TAB>|<TAB>|T|ext
@@ -135,9 +147,15 @@ function blockIndentText(input: InputState, options: IndentOptions): Action {
     const line = value.slice(line_start, selectionEnd);
     const [, old_leading_offset] = visibleWidthLeadingSpace(line, tabSize);
 
-    const new_bottom_line_offset = getLineStart(replacement, replacement.length);
+    const new_bottom_line_offset = getLineStart(
+      replacement,
+      replacement.length,
+    );
     const new_bottom_line = replacement.slice(new_bottom_line_offset);
-    const [, max_leading_offset] = visibleWidthLeadingSpace(new_bottom_line, tabSize);
+    const [, max_leading_offset] = visibleWidthLeadingSpace(
+      new_bottom_line,
+      tabSize,
+    );
 
     if (cursor_offset <= old_leading_offset) {
       select.end = block_start + new_bottom_line_offset + cursor_offset;
@@ -159,7 +177,10 @@ export function outdentText(input: InputState, options: IndentOptions): Action {
   const { value, selectionStart, selectionEnd, selectionDirection } = input;
 
   const block_start = getLineStart(value, selectionStart);
-  const block_end = getBlockLineEnd(value, Math.max(selectionEnd, selectionStart + 1));
+  const block_end = getBlockLineEnd(
+    value,
+    Math.max(selectionEnd, selectionStart + 1),
+  );
 
   const block = value.slice(block_start, block_end);
 
@@ -196,7 +217,10 @@ export function outdentText(input: InputState, options: IndentOptions): Action {
     const cursor_offset = selectionStart - line_start;
     const line = value.slice(line_start, selectionStart);
     const [, old_leading_offset] = visibleWidthLeadingSpace(line, tabSize);
-    const [, max_leading_offset] = visibleWidthLeadingSpace(replacement, tabSize);
+    const [, max_leading_offset] = visibleWidthLeadingSpace(
+      replacement,
+      tabSize,
+    );
 
     if (cursor_offset > old_leading_offset) {
       // |<TAB>|<TAB>|T|ext
@@ -217,9 +241,15 @@ export function outdentText(input: InputState, options: IndentOptions): Action {
     const line = value.slice(line_start, selectionEnd);
     const [, old_leading_offset] = visibleWidthLeadingSpace(line, tabSize);
 
-    const new_bottom_line_offset = getLineStart(replacement, replacement.length);
+    const new_bottom_line_offset = getLineStart(
+      replacement,
+      replacement.length,
+    );
     const new_bottom_line = replacement.slice(new_bottom_line_offset);
-    const [, max_leading_offset] = visibleWidthLeadingSpace(new_bottom_line, tabSize);
+    const [, max_leading_offset] = visibleWidthLeadingSpace(
+      new_bottom_line,
+      tabSize,
+    );
 
     if (cursor_offset <= old_leading_offset) {
       select.end = block_start + new_bottom_line_offset + cursor_offset;
@@ -341,7 +371,8 @@ function backspace(input: InputState, options: IndentOptions): Action {
 
 function bothEndsSelected(text: string, start: number, end: number): boolean {
   const is_start = start === 0 || text[start - 1] === "\n";
-  const is_end = end === text.length || text[end] === "\n" || text[end] === "\r";
+  const is_end =
+    end === text.length || text[end] === "\n" || text[end] === "\r";
   return start !== end && is_start && is_end;
 }
 
@@ -363,7 +394,10 @@ function getBlockLineEnd(text: string, index: number): number {
     index--;
   }
 
-  while (index > 0 && (index === text.length || text[index] === "\n" || text[index] === "\r")) {
+  while (
+    index > 0 &&
+    (index === text.length || text[index] === "\n" || text[index] === "\r")
+  ) {
     index--;
   }
 
@@ -381,14 +415,20 @@ function getLineEnd(text: string, index: number): number {
 /**
  * A plugin that automatically inserts or removes indentation.
  */
-export function hookTab({ input }: ShikiCode, options: IndentOptions): IDisposable {
+export function hookTab(
+  { input }: ShikiCode,
+  options: IndentOptions,
+): IDisposable {
   const onKeydown = (e: KeyboardEvent) => {
     switch (e.key) {
       case "Tab": {
         e.preventDefault();
 
         const action = e.shiftKey ? outdentText : indentText;
-        const { patch, select } = action(e.target as HTMLTextAreaElement, options);
+        const { patch, select } = action(
+          e.target as HTMLTextAreaElement,
+          options,
+        );
         if (patch) {
           setRangeText(input, patch.value, patch.start, patch.end, patch.mode);
           input.dispatchEvent(new Event("input"));
@@ -402,7 +442,10 @@ export function hookTab({ input }: ShikiCode, options: IndentOptions): IDisposab
       }
 
       case "Enter": {
-        const { patch, select } = enter(e.target as HTMLTextAreaElement, options);
+        const { patch, select } = enter(
+          e.target as HTMLTextAreaElement,
+          options,
+        );
         if (patch || select) {
           e.preventDefault();
         }

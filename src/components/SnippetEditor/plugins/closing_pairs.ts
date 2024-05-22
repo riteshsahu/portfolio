@@ -19,7 +19,9 @@ const should_auto_close = " \t\n.,;)]}>=";
 /**
  * A plugin that automatically inserts closing pairs.
  */
-export function hookClosingPairs(...pairs_rule_list: readonly ClosingPairsRules[]): EditorPlugin {
+export function hookClosingPairs(
+  ...pairs_rule_list: readonly ClosingPairsRules[]
+): EditorPlugin {
   const rules = new Map<string, ResolvedClosingPairsRules>();
 
   const list = default_pairs.concat(pairs_rule_list);
@@ -69,12 +71,21 @@ export function hookClosingPairs(...pairs_rule_list: readonly ClosingPairsRules[
       }
 
       // add pairs surrounding the selection
-      if (selectionStart !== selectionEnd && config.auto_closing_pairs_open.has(e.key)) {
+      if (
+        selectionStart !== selectionEnd &&
+        config.auto_closing_pairs_open.has(e.key)
+      ) {
         e.preventDefault();
         const text = input.value.slice(selectionStart, selectionEnd);
         const left = e.key;
         const right = config.auto_closing_pairs_open.get(left)!;
-        setRangeText(input, left + text + right, selectionStart, selectionEnd, "select");
+        setRangeText(
+          input,
+          left + text + right,
+          selectionStart,
+          selectionEnd,
+          "select",
+        );
         input.dispatchEvent(new Event("input"));
         input.dispatchEvent(new Event("change"));
         input.setSelectionRange(selectionStart + 1, selectionEnd + 1);
@@ -90,7 +101,13 @@ export function hookClosingPairs(...pairs_rule_list: readonly ClosingPairsRules[
         e.preventDefault();
         const left = e.key;
         const right = config.auto_closing_pairs_open.get(left)!;
-        setRangeText(input, left + right, selectionStart, selectionEnd, "start");
+        setRangeText(
+          input,
+          left + right,
+          selectionStart,
+          selectionEnd,
+          "start",
+        );
         input.dispatchEvent(new Event("input"));
         input.dispatchEvent(new Event("change"));
         input.setSelectionRange(selectionStart + 1, selectionEnd + 1);
@@ -101,7 +118,9 @@ export function hookClosingPairs(...pairs_rule_list: readonly ClosingPairsRules[
       if (
         selectionStart === selectionEnd &&
         selectionStart > 0 &&
-        config.auto_closing_pairs.has(input.value.slice(selectionStart - 1, selectionStart + 1))
+        config.auto_closing_pairs.has(
+          input.value.slice(selectionStart - 1, selectionStart + 1),
+        )
       ) {
         input.setSelectionRange(selectionStart, selectionEnd + 1);
       }
@@ -116,7 +135,13 @@ export function hookClosingPairs(...pairs_rule_list: readonly ClosingPairsRules[
 }
 
 function isBackspace(e: KeyboardEvent) {
-  return e.key === "Backspace" && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey;
+  return (
+    e.key === "Backspace" &&
+    !e.shiftKey &&
+    !e.ctrlKey &&
+    !e.altKey &&
+    !e.metaKey
+  );
 }
 
 export const pairs_parentheses = ["(", ")"] satisfies ClosingPair;

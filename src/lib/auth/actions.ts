@@ -8,7 +8,10 @@ import { encryptJwt, sessionExpireTime } from "./session";
 export async function login(prevState: any, formData: FormData) {
   const username = formData.get("username");
   const password = formData.get("password") as string;
-  const encryptPass = crypto.createHash("SHA256").update(password).digest("hex");
+  const encryptPass = crypto
+    .createHash("SHA256")
+    .update(password)
+    .digest("hex");
 
   if (username !== process.env.AUTH_USER) {
     return {

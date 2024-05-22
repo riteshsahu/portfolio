@@ -2,7 +2,14 @@ import React from "react";
 import SnippetEditor from "../SnippetEditor";
 import prisma from "@/lib/prisma";
 
-async function SnippetForm({ action, title, code, lang, categoryId, ...props }) {
+async function SnippetForm({
+  action,
+  title,
+  code,
+  lang,
+  categoryId,
+  ...props
+}) {
   const categories = await prisma.snippetCategory.findMany();
 
   return (
@@ -15,7 +22,12 @@ async function SnippetForm({ action, title, code, lang, categoryId, ...props }) 
           className="mb-2 h-10 w-1/2 border-2 text-black"
         />
       </div>
-      <select required defaultValue={categoryId} className="mb-3 text-black" name="categoryId">
+      <select
+        required
+        defaultValue={categoryId}
+        className="mb-3 text-black"
+        name="categoryId"
+      >
         {categories.map((cat) => (
           <option key={cat.id} value={cat.id}>
             {cat.name}

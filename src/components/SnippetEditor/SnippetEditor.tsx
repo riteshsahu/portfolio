@@ -2,7 +2,11 @@
 "use client";
 import { SNIPPET_EDITOR_THEME } from "@/constants";
 import { useEffect, useRef, useState } from "react";
-import type { BundledLanguage, BundledTheme, Highlighter } from "shiki/bundle/web";
+import type {
+  BundledLanguage,
+  BundledTheme,
+  Highlighter,
+} from "shiki/bundle/web";
 import { bundledLanguagesInfo, getHighlighter } from "shiki/bundle/web";
 import styles from "./SnippetEditor.module.scss";
 import type { EditorPlugin } from "./plugins";
@@ -47,11 +51,18 @@ export interface EditorOptions extends IndentOptions {
    */
   readonly readOnly: boolean;
   readonly name: string;
-  readonly language: BundledLanguage | "plaintext" | "txt" | "text" | "plain" | (string & {});
+  readonly language:
+    | BundledLanguage
+    | "plaintext"
+    | "txt"
+    | "text"
+    | "plain"
+    | (string & {});
   readonly theme: BundledTheme | "none" | (string & {});
 }
 
-export interface InitOptions extends Pick<EditorOptions, "name" | "language" | "theme"> {
+export interface InitOptions
+  extends Pick<EditorOptions, "name" | "language" | "theme"> {
   readonly value?: string;
 }
 
@@ -62,7 +73,11 @@ interface EditorOptionsWithValue extends EditorOptions {
 }
 
 interface ShikiCodeFactory {
-  create(domElement: HTMLElement, highlighter: Highlighter, options: InitOptions): ShikiCode;
+  create(
+    domElement: HTMLElement,
+    highlighter: Highlighter,
+    options: InitOptions,
+  ): ShikiCode;
   withOptions(options: UpdateOptions): ShikiCodeFactory;
   withPlugins(...plugins: readonly EditorPlugin[]): ShikiCodeFactory;
 }
@@ -106,7 +121,11 @@ export function shikiCode(): ShikiCodeFactory {
   const plugin_list: EditorPlugin[] = [];
 
   return {
-    create(domElement: HTMLElement, highlighter: Highlighter, options: InitOptions): ShikiCode {
+    create(
+      domElement: HTMLElement,
+      highlighter: Highlighter,
+      options: InitOptions,
+    ): ShikiCode {
       return create(
         domElement,
         highlighter,
@@ -154,7 +173,13 @@ function create(
   }
 
   const forceRender = (value = input.value) => {
-    render(output, highlighter, value, editor_options.language, editor_options.theme);
+    render(
+      output,
+      highlighter,
+      value,
+      editor_options.language,
+      editor_options.theme,
+    );
   };
 
   const onInput = () => {
@@ -231,11 +256,18 @@ function initContainer(container: HTMLElement) {
   container.style.position = "relative";
 }
 
-function shouldUpdateContainer(config: EditorOptions, newOptions: UpdateOptions) {
+function shouldUpdateContainer(
+  config: EditorOptions,
+  newOptions: UpdateOptions,
+) {
   return newOptions.theme !== void 0 && newOptions.theme !== config.theme;
 }
 
-function updateContainer(container: HTMLElement, highlighter: Highlighter, theme_name: string) {
+function updateContainer(
+  container: HTMLElement,
+  highlighter: Highlighter,
+  theme_name: string,
+) {
   const theme = highlighter.getTheme(theme_name);
   container.style.setProperty("--fg", theme.fg);
   container.style.setProperty("--bg", theme.bg);
@@ -253,13 +285,18 @@ function initIO(input: HTMLTextAreaElement, output: HTMLElement) {
 
 function shouldUpdateIO(config: EditorOptions, newOptions: UpdateOptions) {
   return (
-    (newOptions.lineNumbers !== void 0 && newOptions.lineNumbers !== config.lineNumbers) ||
+    (newOptions.lineNumbers !== void 0 &&
+      newOptions.lineNumbers !== config.lineNumbers) ||
     (newOptions.tabSize !== void 0 && newOptions.tabSize !== config.tabSize) ||
     (newOptions.readOnly !== void 0 && newOptions.readOnly !== config.readOnly)
   );
 }
 
-function updateIO(input: HTMLTextAreaElement, output: HTMLElement, options: UpdateOptions) {
+function updateIO(
+  input: HTMLTextAreaElement,
+  output: HTMLElement,
+  options: UpdateOptions,
+) {
   switch (options.lineNumbers) {
     case "on": {
       input.classList.add(styles.lineNumbers);

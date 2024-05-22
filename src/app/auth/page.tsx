@@ -20,11 +20,18 @@ export default function Auth() {
             <input required name="username" placeholder="Username" />
           </div>
           <div>
-            <input required type="password" name="password" placeholder="Password" />
+            <input
+              required
+              type="password"
+              name="password"
+              placeholder="Password"
+            />
           </div>
           <br />
           <div>
-            {state?.status === "failure" && <div className="text-red-500">{state.message}</div>}
+            {state?.status === "failure" && (
+              <div className="text-red-500">{state.message}</div>
+            )}
           </div>
           <SubmitButton>Login</SubmitButton>
         </form>

@@ -21,7 +21,11 @@ export function autoload(editor: ShikiCode): IDisposable {
       newOptions.theme !== "none" &&
       !themes.includes(newOptions.theme)
     ) {
-      task_list.push(editor.highlighter.loadTheme(newOptions.theme as unknown as BundledTheme));
+      task_list.push(
+        editor.highlighter.loadTheme(
+          newOptions.theme as unknown as BundledTheme,
+        ),
+      );
     }
 
     if (
@@ -29,7 +33,9 @@ export function autoload(editor: ShikiCode): IDisposable {
       newOptions.language !== "text" &&
       !langs.includes(newOptions.language)
     ) {
-      task_list.push(editor.highlighter.loadLanguage(newOptions.language as BundledLanguage));
+      task_list.push(
+        editor.highlighter.loadLanguage(newOptions.language as BundledLanguage),
+      );
     }
 
     await Promise.all(task_list);

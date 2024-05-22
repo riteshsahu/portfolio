@@ -99,7 +99,10 @@ export function setRangeText(
       break;
     }
     case "end": {
-      input.setSelectionRange(start + replacement.length, start + replacement.length);
+      input.setSelectionRange(
+        start + replacement.length,
+        start + replacement.length,
+      );
       break;
     }
 

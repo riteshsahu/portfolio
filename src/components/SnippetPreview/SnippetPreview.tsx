@@ -13,7 +13,13 @@ import CopySnippetButton from "../CopySnippetButton";
 
 interface SnippetPreviewProps extends Snippet {}
 
-async function SnippetPreview({ title, code, lang = "js", id, slug }: SnippetPreviewProps) {
+async function SnippetPreview({
+  title,
+  code,
+  lang = "js",
+  id,
+  slug,
+}: SnippetPreviewProps) {
   const highlighter = await getHighlighter(lang, SNIPPET_EDITOR_THEME);
 
   const html = highlighter.codeToHtml(code, {
