@@ -1,6 +1,8 @@
 .codeContainer {
   & > pre {
     border-radius: 10px;
+    max-width: 100%;
+    overflow-x: auto;
 
     & > code {
       display: block;

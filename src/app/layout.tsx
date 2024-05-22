@@ -7,6 +7,7 @@ import { logout } from "@/lib/auth/actions";
 import { getAuth } from "@/lib/auth";
 import Button from "@/components/Button";
 import clsx from "clsx";
+import { FiLogOut } from "react-icons/fi";
 
 const links = [
   {
@@ -31,14 +32,16 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={clsx(inter.className, "bg-neutral-800 text-white")}>
+      <body className={clsx(inter.className)}>
         <header className="flex h-12 justify-between border-b-2 border-black p-3">
           <div>
             <Link href={"/"}>Home</Link>
           </div>
           {auth?.user && (
             <form action={logout}>
-              <Button type="submit">Logout</Button>
+              <Button type="submit">
+                <FiLogOut />
+              </Button>
             </form>
           )}
           <nav>
