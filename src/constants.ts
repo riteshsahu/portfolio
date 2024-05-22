@@ -7,3 +7,5 @@ export const ROUTE_PATH = {
 } as const;
 
 export const PUBLIC_ROUTES = [ROUTE_PATH.HOME, ROUTE_PATH.AUTH, ROUTE_PATH.SNIPPETS];
+
+export const SNIPPET_EDITOR_THEME = "one-dark-pro";

@@ -3,17 +3,15 @@ import prisma from "@/lib/prisma";
 import { kebabCase } from "lodash";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import SnippetEditor from "../SnippetEditor";
+import SnippetForm from "../SnippetForm";
+import { getFormData } from "@/utils";
+import { Snippet } from "@prisma/client";
 
 function AddSnippet() {
   async function handleFormSubmit(formData: FormData) {
     "use server";
 
-    const data = {
-      title: formData.get("title") as string,
-      code: formData.get("code") as string,
-      lang: "javascript",
-    };
+    const data: Snippet = getFormData(formData);
 
     if (data.title && data.code) {
       await prisma.snippet.create({
@@ -29,17 +27,11 @@ function AddSnippet() {
   }
 
   return (
-    <form action={handleFormSubmit}>
-      <div>
-        <input name="title" type="text" className="mb-2 w-1/2 border-2" />
-      </div>
-      <div>
-        <SnippetEditor name="code" />
-      </div>
+    <SnippetForm action={handleFormSubmit}>
       <button className="border-2" type="submit">
         Add Snippet
       </button>
-    </form>
+    </SnippetForm>
   );
 }
 

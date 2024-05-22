@@ -1,4 +1,4 @@
-import type { BundledLanguage, BundledTheme } from "shiki";
+import type { BundledLanguage, BundledTheme } from "shiki/bundle/web";
 import type { IDisposable, ShikiCode } from "./index";
 
 /**

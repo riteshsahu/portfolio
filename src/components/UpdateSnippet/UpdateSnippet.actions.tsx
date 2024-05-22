@@ -2,14 +2,13 @@
 
 import { ROUTE_PATH } from "@/constants";
 import prisma from "@/lib/prisma";
+import { getFormData } from "@/utils";
+import { Snippet } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function handleUpdate(id: string, formData: FormData) {
-  const data = {
-    title: formData.get("title") as string,
-    code: formData.get("code") as string,
-  };
+  const data: Snippet = getFormData(formData);
 
   if (data.title && data.code) {
     await prisma.snippet.update({

@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 "use client";
-import type { BundledLanguage, BundledTheme, Highlighter } from "shiki";
-import type { EditorPlugin } from "./plugins";
-import { getHighlighter } from "shiki";
-import { autoload, hookClosingPairs, hookTab } from "./plugins";
-import { injectStyle } from "./SnippetEditor.style";
-import { useEffect, useRef } from "react";
+import { SNIPPET_EDITOR_THEME } from "@/constants";
+import { useEffect, useRef, useState } from "react";
+import type { BundledLanguage, BundledTheme, Highlighter } from "shiki/bundle/web";
+import { bundledLanguagesInfo, getHighlighter } from "shiki/bundle/web";
 import styles from "./SnippetEditor.module.scss";
+import type { EditorPlugin } from "./plugins";
+import { autoload, hookClosingPairs, hookTab } from "./plugins";
 
 export function hookScroll(input: HTMLElement, output: HTMLElement) {
   const onScroll = () => {
@@ -169,7 +169,7 @@ function create(
       input.removeEventListener("input", onInput);
     },
     hookScroll(input, output),
-    injectStyle(doc),
+    // injectStyle(doc),
   ];
 
   const editor: ShikiCode = {
@@ -247,8 +247,8 @@ function initIO(input: HTMLTextAreaElement, output: HTMLElement) {
   input.setAttribute("autocorrect", "off");
   input.setAttribute("spellcheck", "false");
 
-  input.classList.add("shikicode", "input");
-  output.classList.add("shikicode", "output");
+  input.classList.add("shikicode", styles.editorInput);
+  output.classList.add("shikicode", styles.editorOutput);
 }
 
 function shouldUpdateIO(config: EditorOptions, newOptions: UpdateOptions) {
@@ -262,13 +262,13 @@ function shouldUpdateIO(config: EditorOptions, newOptions: UpdateOptions) {
 function updateIO(input: HTMLTextAreaElement, output: HTMLElement, options: UpdateOptions) {
   switch (options.lineNumbers) {
     case "on": {
-      input.classList.add("line-numbers");
-      output.classList.add("line-numbers");
+      input.classList.add(styles.lineNumbers);
+      output.classList.add(styles.lineNumbers);
       break;
     }
     case "off": {
-      input.classList.remove("line-numbers");
-      output.classList.remove("line-numbers");
+      input.classList.remove(styles.lineNumbers);
+      output.classList.remove(styles.lineNumbers);
       break;
     }
   }
@@ -305,20 +305,21 @@ function shouldRerender(options: EditorOptions, newOptions: UpdateOptions) {
 }
 
 interface SnippetEditor {
-  name: string;
   code?: string;
+  lang?: string;
 }
 
-const SnippetEditor = ({ code, name }: SnippetEditor) => {
+const SnippetEditor = ({ code, lang = "" }: SnippetEditor) => {
   const editorRef = useRef<any>(null);
   const editor = useRef<ShikiCode | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState(lang);
 
   useEffect(() => {
     let ignore = true;
     async function initEditor() {
       // declare your theme and language
-      const theme = "one-dark-pro";
-      const language = "tsx";
+      const theme = SNIPPET_EDITOR_THEME;
+      const language = selectedLanguage;
 
       // get the highlighter
       const h = await getHighlighter({ langs: [language], themes: [theme] });
@@ -348,7 +349,7 @@ const SnippetEditor = ({ code, name }: SnippetEditor) => {
           value: code,
           language,
           theme,
-          name,
+          name: "code",
         });
     }
 
@@ -358,15 +359,32 @@ const SnippetEditor = ({ code, name }: SnippetEditor) => {
       ignore = false;
       editor.current?.dispose();
     };
-  }, [code, name]);
+  }, [code, selectedLanguage]);
 
   return (
-    <div ref={editorRef} className={styles.editor}>
-      {/* <header className="editor-header">
-        <select id="lang_list"></select>
-        <select id="theme_list"></select>
-      </header> */}
-      {/* <footer className="editor-footer"></footer> */}
+    <div>
+      <div ref={editorRef} className={styles.editor}>
+        <header>
+          <select
+            className="text-black"
+            required
+            name="lang"
+            value={selectedLanguage}
+            id="lang_list"
+            onChange={(e) => {
+              setSelectedLanguage(e.target.value);
+            }}
+          >
+            {bundledLanguagesInfo.map((language) => (
+              <option key={language.id} value={language.id}>
+                {language.name}
+              </option>
+            ))}
+          </select>
+          {/* <select id="theme_list"></select> */}
+        </header>
+        {/* <footer className="editor-footer"></footer> */}
+      </div>
     </div>
   );
 };
