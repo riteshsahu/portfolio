@@ -3,11 +3,7 @@ import { cookies } from "next/headers";
 
 export default function manifest(): MetadataRoute.Manifest {
   const session = cookies().get("session")?.value;
-  if (!session) {
-    return {};
-  }
-
-  return {
+  const json: MetadataRoute.Manifest = {
     name: "Me",
     short_name: "Me",
     description: "Ritesh Portfolio",
@@ -25,6 +21,14 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
     theme_color: "#ffffff",
     background_color: "#ffffff",
+  };
+
+  if (!session) {
+    return json;
+  }
+
+  return {
+    ...json,
     start_url: "/auth",
     display: "minimal-ui",
   };

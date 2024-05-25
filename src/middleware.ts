@@ -12,7 +12,7 @@ export default async function middleware(req: NextRequest) {
   if (!isLoggedIn) {
     // not logged in
     if (!isPublicRoute) {
-      return NextResponse.redirect(new URL(ROUTE_PATH.HOME, req.nextUrl));
+      return NextResponse.redirect(new URL(ROUTE_PATH.AUTH, req.nextUrl));
     }
   } else {
     // logged in

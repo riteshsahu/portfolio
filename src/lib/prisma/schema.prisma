@@ -29,5 +29,23 @@ model SnippetCategory {
   id        String    @id @default(uuid())
   name      String
   createdAt DateTime  @default(now())
-  Snippet   Snippet[]
+  snippets  Snippet[]
+}
+
+model DevTool {
+  id          String           @id @default(uuid())
+  slug        String           @unique
+  name        String
+  image       String
+  link        String
+  description String
+  category    DevToolCategory? @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+}
+
+model DevToolCategory {
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now())
+  devTools  DevTool[]
 }

@@ -5,7 +5,6 @@ async function SnippetsList() {
   const snippets = await prisma.snippet.findMany({
     include: { category: true },
   });
-  console.log("🚀 ~ SnippetsList ~ snippets:", snippets[0]);
 
   return (
     <div>

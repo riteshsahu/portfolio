@@ -1,41 +1,88 @@
 "use client";
-import SubmitButton from "@/components/SubmitButton";
+import ThemeToggle from "@/components/ThemeToggle";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { login } from "@/lib/auth/actions";
-import { useFormState } from "react-dom";
-
-const initialState = {
-  message: "",
-  status: "",
-};
+import { AuthFormInputs } from "@/lib/types";
+import { useState, useTransition } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 export default function Auth() {
-  // TODO: replace this useActionState
-  const [state, formAction] = useFormState(login, initialState);
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState("");
+  const form = useForm<AuthFormInputs>({
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
+
+  const onSubmit: SubmitHandler<AuthFormInputs> = (values) => {
+    startTransition(async () => {
+      const json = await login(values);
+      if (!json.ok && json.message) {
+        setError(json.message);
+      } else {
+        setError("");
+      }
+    });
+  };
 
   return (
-    <main className="min-h-screen p-6">
-      <section>
-        <form action={formAction}>
-          <div className="mb-3">
-            <input required name="username" placeholder="Username" />
-          </div>
-          <div>
-            <input
-              required
-              type="password"
-              name="password"
-              placeholder="Password"
-            />
-          </div>
-          <br />
-          <div>
-            {state?.status === "failure" && (
-              <div className="text-red-500">{state.message}</div>
+    <main className="flex min-h-screen items-center justify-center p-6">
+      <div className="absolute right-0 top-0 p-5">
+        <ThemeToggle />
+      </div>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full max-w-[400px] space-y-8"
+        >
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input required placeholder="Enter username" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
-          </div>
-          <SubmitButton>Login</SubmitButton>
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    required
+                    type="password"
+                    placeholder="Enter password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {!!error && <FormMessage>{error}</FormMessage>}
+          <Button className="min-w-[117px]" disabled={isPending} type="submit">
+            {isPending ? "Submitting..." : "Submit"}
+          </Button>
         </form>
-      </section>
+      </Form>
     </main>
   );
 }

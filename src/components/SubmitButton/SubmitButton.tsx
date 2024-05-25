@@ -1,8 +1,8 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-import Button from "../Button";
 import React from "react";
+import { Button } from "@/components/ui/button";
 
 type SubmitButtonProps = React.ComponentProps<typeof Button>;
 
