@@ -1,13 +1,12 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import React from "react";
-import { FiCopy } from "react-icons/fi";
+import { Button, ButtonProps } from "@/components/ui/button";
+import { Copy } from "lucide-react";
 
-interface CopySnippetButton {
+interface CopySnippetButton extends ButtonProps {
   snippetId: string;
 }
 
-function CopySnippetButton({ snippetId }: CopySnippetButton) {
+function CopySnippetButton({ snippetId, ...props }: CopySnippetButton) {
   const handleCopy = () => {
     const code = document.getElementById(snippetId)?.querySelector("code");
     if (code?.textContent) {
@@ -24,8 +23,8 @@ function CopySnippetButton({ snippetId }: CopySnippetButton) {
   };
 
   return (
-    <Button onClick={handleCopy}>
-      <FiCopy />
+    <Button size={"icon"} variant={"ghost"} onClick={handleCopy} {...props}>
+      <Copy />
     </Button>
   );
 }

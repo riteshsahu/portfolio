@@ -1,6 +1,7 @@
 import React from "react";
 import SnippetEditor from "../SnippetEditor";
 import prisma from "@/lib/prisma";
+import { Input } from "@/components/ui/input";
 
 async function SnippetForm({
   action,
@@ -15,12 +16,7 @@ async function SnippetForm({
   return (
     <form action={action}>
       <div>
-        <input
-          defaultValue={title}
-          name="title"
-          type="text"
-          className="mb-2 h-10 w-1/2 border-2 text-black"
-        />
+        <Input defaultValue={title} name="title" type="text" className="mb-2" />
       </div>
       <select
         required

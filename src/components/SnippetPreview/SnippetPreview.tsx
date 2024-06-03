@@ -1,15 +1,13 @@
+import EntityActions from "@/components/EntityActions";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ROUTE_PATH, SNIPPET_EDITOR_THEME } from "@/constants";
 import { getRoutePath } from "@/helpers/route.helpers";
 import { Snippet } from "@prisma/client";
-import Link from "next/link";
 import { cache } from "react";
-import { FiEdit, FiTrash } from "react-icons/fi";
 import { getHighlighter as shikiGetHighlighter } from "shiki/bundle/web";
-import SubmitButton from "../SubmitButton";
-import { handleDelete } from "./SnippetPreview.actions";
-import styles from "./SnippetPreview.module.scss";
-import { getAuth } from "@/lib/auth";
 import CopySnippetButton from "../CopySnippetButton";
+import styles from "./SnippetPreview.module.scss";
+import { deleteSnippet } from "@/lib/actions";
 
 interface SnippetPreviewProps extends Snippet {}
 
@@ -27,35 +25,43 @@ async function SnippetPreview({
     theme: SNIPPET_EDITOR_THEME,
   });
 
-  const auth = await getAuth();
   const snippetId = `snippet-${id}`;
 
   return (
-    <div>
-      <div>{title}</div>
-      <div className="relative">
-        <div
-          id={snippetId}
-          className={styles.codeContainer}
-          dangerouslySetInnerHTML={{ __html: html }}
+    <Card className="relative">
+      <CardHeader className="flex flex-row items-center justify-between gap-3">
+        <div>{title}</div>
+        <EntityActions
+          config={{
+            // view: {
+            //   path: getRoutePath(ROUTE_PATH.VIEW_SNIPPET, {
+            //     slug: slug,
+            //   }),
+            // },
+            update: {
+              path: getRoutePath(ROUTE_PATH.UPDATE_SNIPPET, {
+                slug: slug,
+              }),
+            },
+            delete: {
+              action: deleteSnippet.bind(null, id),
+            },
+          }}
         />
-        <div className="absolute right-0 top-0 flex flex-col gap-2 p-2">
-          <CopySnippetButton snippetId={snippetId} />
-          {auth.user && (
-            <>
-              <Link href={getRoutePath(ROUTE_PATH.UPDATE_SNIPPET, { slug })}>
-                <FiEdit color="white" />
-              </Link>
-              <form action={handleDelete.bind(null, id)}>
-                <SubmitButton>
-                  <FiTrash />
-                </SubmitButton>
-              </form>
-            </>
-          )}
+      </CardHeader>
+      <CardContent>
+        <div className="relative">
+          <div
+            id={snippetId}
+            className={styles.codeContainer}
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+          <div className="absolute right-0 top-0 p-2">
+            <CopySnippetButton className="text-white" snippetId={snippetId} />
+          </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
 

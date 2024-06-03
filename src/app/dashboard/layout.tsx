@@ -23,9 +23,14 @@ const dashboardLinks = [
     path: ROUTE_PATH.SNIPPETS,
   },
   {
-    name: "Tools",
+    name: "Resources",
     Icon: Shapes,
-    path: ROUTE_PATH.TOOLS,
+    path: ROUTE_PATH.RESOURCES,
+  },
+  {
+    name: "Resource Categories",
+    Icon: Shapes,
+    path: ROUTE_PATH.RESOURCES_CATEGORIES,
   },
 ];
 

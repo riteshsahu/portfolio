@@ -28,25 +28,26 @@ model Snippet {
 model SnippetCategory {
   id        String    @id @default(uuid())
   name      String
+  slug      String    @unique
   createdAt DateTime  @default(now())
   snippets  Snippet[]
 }
 
-model DevTool {
-  id          String           @id @default(uuid())
-  slug        String           @unique
+model Resource {
+  id          String            @id @default(uuid())
+  slug        String            @unique
   name        String
   image       String
   link        String
   description String
-  category    DevToolCategory? @relation(fields: [categoryId], references: [id])
-  categoryId  String?
+  category    ResourceCategory? @relation(fields: [categoryId], references: [id])
+  categoryId  String
 }
 
-model DevToolCategory {
-  id        String    @id @default(uuid())
+model ResourceCategory {
+  id        String     @id @default(uuid())
   name      String
-  slug      String
-  createdAt DateTime  @default(now())
-  devTools  DevTool[]
+  slug      String     @unique
+  createdAt DateTime   @default(now())
+  devTools  Resource[]
 }

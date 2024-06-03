@@ -3,14 +3,15 @@ import { LoaderCircle } from "lucide-react";
 import React from "react";
 
 interface LoaderProps {
-  className: string;
+  className?: string;
+  size?: number;
 }
 
-function Loader({ className }: LoaderProps) {
+function Loader({ className, size = 26 }: LoaderProps) {
   return (
     <LoaderCircle
-      size={26}
-      className={cn("my-28 animate-spin text-primary/60", className)}
+      size={size}
+      className={cn("animate-spin text-primary/60", className)}
     />
   );
 }

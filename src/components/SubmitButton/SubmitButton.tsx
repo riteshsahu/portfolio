@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 
 type SubmitButtonProps = React.ComponentProps<typeof Button>;
 
-function SubmitButton({ children }: SubmitButtonProps) {
+function SubmitButton({ children, ...delegated }: SubmitButtonProps) {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" disabled={pending}>
+    <Button {...delegated} type="submit" disabled={pending}>
       {children}
     </Button>
   );
