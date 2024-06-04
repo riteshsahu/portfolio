@@ -8,6 +8,11 @@ export const ROUTE_PATH = {
   VIEW_SNIPPET: "/dashboard/snippets/[slug]",
   UPDATE_SNIPPET: "/dashboard/snippets/[slug]/update",
 
+  SNIPPETS_CATEGORIES: "/dashboard/snippets/categories",
+  ADD_SNIPPET_CATEGORY: "/dashboard/snippets/categories/add",
+  VIEW_SNIPPET_CATEGORY: "/dashboard/snippets/categories/[slug]",
+  UPDATE_SNIPPET_CATEGORY: "/dashboard/snippets/categories/[slug]/update",
+
   RESOURCES: "/dashboard/resources",
   ADD_RESOURCE: "/dashboard/resources/add",
   VIEW_RESOURCE: "/dashboard/resources/[slug]",

@@ -20,3 +20,7 @@ export type AddResourceFormInputs = {
 export type AddResourceCategoryFormInputs = {
   name: string;
 };
+
+export type AddSnippetCategoryFormInputs = {
+  name: string;
+};

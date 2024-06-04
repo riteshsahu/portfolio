@@ -24,6 +24,11 @@ const dashboardLinks = [
     path: ROUTE_PATH.SNIPPETS,
   },
   {
+    name: "Snippet Categories",
+    Icon: Shapes,
+    path: ROUTE_PATH.SNIPPETS_CATEGORIES,
+  },
+  {
     name: "Resources",
     Icon: Shapes,
     path: ROUTE_PATH.RESOURCES,

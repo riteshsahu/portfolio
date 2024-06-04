@@ -5,6 +5,7 @@ import prisma from "@/lib/prisma";
 import {
   AddResourceCategoryFormInputs,
   AddResourceFormInputs,
+  AddSnippetCategoryFormInputs,
   ServerResponse,
 } from "@/lib/types";
 import { kebabCase } from "lodash";
@@ -118,3 +119,60 @@ export async function deleteSnippet(id: string) {
   });
   revalidatePath(ROUTE_PATH.SNIPPETS);
 }
+
+export const deleteSnippetCategory = async (
+  id: string,
+): Promise<ServerResponse | void> => {
+  if (!id) {
+    return {
+      message: "ID is required!",
+      ok: false,
+    };
+  }
+
+  await prisma.snippetCategory.delete({
+    where: { id },
+  });
+
+  const path = ROUTE_PATH.SNIPPETS_CATEGORIES;
+
+  revalidatePath(path);
+};
+
+export const upsertSnippetCategory = async (
+  values: AddSnippetCategoryFormInputs,
+  options?: any,
+): Promise<ServerResponse | void> => {
+  const { name } = values;
+  const {
+    pathToRevalidate = ROUTE_PATH.SNIPPETS_CATEGORIES,
+    shouldRedirect = false,
+    slug,
+  } = options;
+
+  const newSlug = kebabCase(name);
+
+  if (!name) {
+    return {
+      message: "Name is required!",
+      ok: false,
+    };
+  }
+
+  await prisma.snippetCategory.upsert({
+    where: { slug: slug || newSlug },
+    create: {
+      name,
+      slug: newSlug,
+    },
+    update: {
+      name,
+      slug: newSlug,
+    },
+  });
+
+  if (pathToRevalidate) {
+    revalidatePath(pathToRevalidate);
+    shouldRedirect && redirect(pathToRevalidate);
+  }
+};
