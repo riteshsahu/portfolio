@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { addResourceCategory } from "@/lib/actions";
+import { upsertResourceCategory } from "@/lib/actions";
 import { AddResourceCategoryFormInputs } from "@/lib/types";
 import { useState, useTransition } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -34,7 +34,7 @@ function ResourceCategoryForm({
 
   const onSubmit: SubmitHandler<AddResourceCategoryFormInputs> = (values) => {
     startTransition(async () => {
-      const json = await addResourceCategory(values, {
+      const json = await upsertResourceCategory(values, {
         shouldRedirect: true,
         slug,
       });
