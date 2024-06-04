@@ -12,6 +12,9 @@ import { kebabCase } from "lodash";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+/* -------------------------------------------------------------------------- */
+/*                                  RESOURCE                                  */
+/* -------------------------------------------------------------------------- */
 export const upsertResource = async (
   values: AddResourceFormInputs,
   options: any,
@@ -56,6 +59,9 @@ export const deleteResource = async (
   revalidatePath(path);
 };
 
+/* -------------------------------------------------------------------------- */
+/*                              RESOURCE CATEGORY                             */
+/* -------------------------------------------------------------------------- */
 export const upsertResourceCategory = async (
   values: AddResourceCategoryFormInputs,
   options?: any,
@@ -113,6 +119,9 @@ export const deleteResourceCategory = async (
   revalidatePath(path);
 };
 
+/* -------------------------------------------------------------------------- */
+/*                                   SNIPPET                                  */
+/* -------------------------------------------------------------------------- */
 export async function deleteSnippet(id: string) {
   await prisma.snippet.delete({
     where: { id },
@@ -120,6 +129,9 @@ export async function deleteSnippet(id: string) {
   revalidatePath(ROUTE_PATH.SNIPPETS);
 }
 
+/* -------------------------------------------------------------------------- */
+/*                              SNIPPET CATEGORY                              */
+/* -------------------------------------------------------------------------- */
 export const deleteSnippetCategory = async (
   id: string,
 ): Promise<ServerResponse | void> => {

@@ -13,7 +13,15 @@ import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ROUTE_PATH } from "@/constants";
 import { logout } from "@/lib/auth/actions";
-import { CircleUser, Code, Menu, Package2, Search, Shapes } from "lucide-react";
+import {
+  CircleUser,
+  Code,
+  Menu,
+  Package2,
+  Search,
+  Shapes,
+  Tag,
+} from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -25,7 +33,7 @@ const dashboardLinks = [
   },
   {
     name: "Snippet Categories",
-    Icon: Shapes,
+    Icon: Tag,
     path: ROUTE_PATH.SNIPPETS_CATEGORIES,
   },
   {
@@ -35,7 +43,7 @@ const dashboardLinks = [
   },
   {
     name: "Resource Categories",
-    Icon: Shapes,
+    Icon: Tag,
     path: ROUTE_PATH.RESOURCES_CATEGORIES,
   },
 ];
