@@ -1,3 +1,4 @@
+import CommonBreadcrumbs from "@/components/CommonBreadcrumbs";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import {
@@ -129,7 +130,8 @@ export default async function DashboardLayout({
           </DropdownMenu>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-          {children}
+          <CommonBreadcrumbs />
+          <div className="flex flex-1 flex-col">{children}</div>
         </main>
       </div>
     </div>
