@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Toaster } from "@/components/ui/sonner";
 import { ROUTE_PATH } from "@/constants";
 import { logout } from "@/lib/auth/actions";
 import {
@@ -146,6 +147,7 @@ export default async function DashboardLayout({
           <CommonBreadcrumbs />
           <div className="flex flex-1 flex-col">{children}</div>
         </main>
+        <Toaster richColors={true} />
       </div>
     </div>
   );

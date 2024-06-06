@@ -1,4 +1,4 @@
-import UpdateSnippet from "@/components/UpdateSnippet";
+import SnippetForm from "@/components/SnippetForm";
 import prisma from "@/lib/prisma";
 
 interface UpdateSnippetPageProps {
@@ -10,15 +10,16 @@ async function UpdateSnippetPage({ params }: UpdateSnippetPageProps) {
   const snippet = await prisma.snippet.findFirst({
     where: { slug },
   });
+  const categories = await prisma.snippetCategory.findMany();
 
   if (!snippet) {
     return;
   }
 
   return (
-    <div>
-      <UpdateSnippet {...snippet} />
-    </div>
+    <main className="min-h-screen p-6">
+      <SnippetForm defaultValues={snippet} categories={categories} />
+    </main>
   );
 }
 

@@ -27,3 +27,4 @@ export const ROUTE_PATH = {
 export const PUBLIC_ROUTES = [ROUTE_PATH.HOME, ROUTE_PATH.AUTH];
 
 export const SNIPPET_EDITOR_THEME = "one-dark-pro";
+export const SNIPPET_DEFAULT_LANGUAGE = "javascript";

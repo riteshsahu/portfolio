@@ -3,16 +3,27 @@ import { Button } from "@/components/ui/button";
 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { upsertResource, upsertResourceCategory } from "@/lib/actions";
+import {
+  getSiteMetaData,
+  upsertResource,
+  upsertResourceCategory,
+} from "@/lib/actions";
 import { AddResourceFormInputs } from "@/lib/types";
-import { cn } from "@/utils";
-import { SyntheticEvent, useState, useTransition } from "react";
+import { addProtocolToUrl, cn } from "@/utils";
+import {
+  SyntheticEvent,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { ResourceCategory } from "@prisma/client";
 
 import { Check, ChevronsUpDown, Plus } from "lucide-react";
 
+import Loader from "@/components/Loader";
 import {
   Command,
   CommandEmpty,
@@ -34,8 +45,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import Loader from "@/components/Loader";
 import { ROUTE_PATH } from "@/constants";
+import { debounce, isNil, omitBy } from "lodash";
+import { toast } from "sonner";
 
 interface ResourceFormProps {
   categories: ResourceCategory[];
@@ -50,28 +62,79 @@ function ResourceForm({
 }: ResourceFormProps) {
   const [isPending, startTransition] = useTransition();
   const [isAddCategoryPending, startAddCategoryTransition] = useTransition();
+  const [isFethingMetaData, startFetchMetaDataTransition] = useTransition();
   const [error, setError] = useState("");
   const [categorySearch, setCategorySearch] = useState("");
+  const [isExactMatch, setIsExactMatch] = useState(false);
   const form = useForm<AddResourceFormInputs>({
     defaultValues: {
       name: "",
+      icon: "",
       image: "",
-      link: "",
+      url: "",
+      title: "",
       description: "",
       categoryId: "",
-      ...defaultValues,
+      ...omitBy(defaultValues, isNil),
     },
   });
 
+  const watchUrl = form.watch("url", "");
+
+  const handleAutoPopulateFields = useMemo(
+    () =>
+      debounce((pageUrl: string) => {
+        startFetchMetaDataTransition(async () => {
+          const siteMetaData = await getSiteMetaData(pageUrl);
+          if (siteMetaData) {
+            const formValues = form.getValues();
+
+            const populateValue = (
+              formFieldName: keyof AddResourceFormInputs,
+              metaDataValue: any,
+            ) => {
+              if (metaDataValue && !formValues[formFieldName]) {
+                form.setValue(formFieldName, metaDataValue);
+              }
+            };
+
+            populateValue("name", siteMetaData.site_name || siteMetaData.title);
+            populateValue("icon", siteMetaData.faviconlink);
+            populateValue("description", siteMetaData.description);
+            populateValue("image", siteMetaData.image);
+            if (siteMetaData.title !== siteMetaData.site_name) {
+              populateValue("title", siteMetaData.title);
+            }
+          }
+        });
+      }, 500),
+    [form],
+  );
+
+  useEffect(() => {
+    try {
+      if (watchUrl) {
+        const url = new URL(addProtocolToUrl(watchUrl));
+        handleAutoPopulateFields(url.href);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [watchUrl, handleAutoPopulateFields]);
+
   const onSubmit: SubmitHandler<AddResourceFormInputs> = (values) => {
     startTransition(async () => {
-      const json = await upsertResource(values, {
-        slug,
-      });
-      if (json && !json.ok && json.message) {
-        setError(json.message);
-      } else {
-        setError("");
+      try {
+        const json = await upsertResource(values, {
+          slug,
+        });
+        if (json && json.message && !json.ok) {
+          setError(json.message);
+        } else {
+          setError("");
+        }
+      } catch (error) {
+        toast.error("Server Error, Please try again.");
       }
     });
   };
@@ -97,6 +160,23 @@ function ResourceForm({
       >
         <FormField
           control={form.control}
+          name="url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="flex items-center gap-2">
+                Resource Link
+                {isFethingMetaData && <Loader size={12} />}
+              </FormLabel>
+              <FormControl>
+                <Input required placeholder="Enter resource link" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
@@ -110,12 +190,26 @@ function ResourceForm({
         />
         <FormField
           control={form.control}
-          name="link"
+          name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Tool Link</FormLabel>
+              <FormLabel>Title</FormLabel>
               <FormControl>
-                <Input required placeholder="Enter tool link" {...field} />
+                <Input placeholder="Enter title" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="icon"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Icon Link</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter icon link" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -141,10 +235,7 @@ function ResourceForm({
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Tell us a little bit about yourself"
-                  {...field}
-                />
+                <Textarea placeholder="Enter description" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -178,11 +269,16 @@ function ResourceForm({
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0">
-                  <Command>
+                  <Command loop>
                     <CommandInput
+                      required
                       placeholder="Search category..."
                       value={categorySearch}
                       onValueChange={setCategorySearch}
+                      isExactMatch={isExactMatch}
+                      onToggleExactMatch={() =>
+                        setIsExactMatch((isMatch) => !isMatch)
+                      }
                     />
                     <CommandEmpty className="px-3 py-3">
                       <div>No category found.</div>
@@ -206,25 +302,35 @@ function ResourceForm({
                     </CommandEmpty>
                     <CommandGroup>
                       <CommandList>
-                        {categories.map((category) => (
-                          <CommandItem
-                            value={category.name}
-                            key={category.id}
-                            onSelect={() => {
-                              form.setValue("categoryId", category.id);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                category.id === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0",
-                              )}
-                            />
-                            {category.name}
-                          </CommandItem>
-                        ))}
+                        {categories
+                          .filter(({ name }) => {
+                            if (isExactMatch && categorySearch) {
+                              return (
+                                name?.toLowerCase() ===
+                                categorySearch?.toLowerCase()
+                              );
+                            }
+                            return true;
+                          })
+                          .map((category) => (
+                            <CommandItem
+                              value={category.name}
+                              key={category.id}
+                              onSelect={() => {
+                                form.setValue("categoryId", category.id);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  category.id === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                              {category.name}
+                            </CommandItem>
+                          ))}
                       </CommandList>
                     </CommandGroup>
                   </Command>

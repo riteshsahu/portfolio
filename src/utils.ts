@@ -15,3 +15,12 @@ export const getFormData = (formData: FormData) => {
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export function addProtocolToUrl(text: string) {
+  // Check if the text already starts with 'http://' or 'https://'
+  if (!/^https?:\/\//i.test(text)) {
+    // If it doesn't, add 'https://' by default
+    text = "https://" + text;
+  }
+  return text;
+}

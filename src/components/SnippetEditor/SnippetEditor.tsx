@@ -1,16 +1,18 @@
 /* eslint-disable no-unused-vars */
 "use client";
-import { SNIPPET_EDITOR_THEME } from "@/constants";
-import { useEffect, useRef, useState } from "react";
+import { SNIPPET_DEFAULT_LANGUAGE, SNIPPET_EDITOR_THEME } from "@/constants";
+import { useEffect, useRef, useState, useTransition } from "react";
 import type {
   BundledLanguage,
   BundledTheme,
   Highlighter,
 } from "shiki/bundle/web";
-import { bundledLanguagesInfo, getHighlighter } from "shiki/bundle/web";
+import { getHighlighter } from "shiki/bundle/web";
 import styles from "./SnippetEditor.module.scss";
 import type { EditorPlugin } from "./plugins";
 import { autoload, hookClosingPairs, hookTab } from "./plugins";
+import { cn } from "@/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function hookScroll(input: HTMLElement, output: HTMLElement) {
   const onScroll = () => {
@@ -341,27 +343,31 @@ function shouldRerender(options: EditorOptions, newOptions: UpdateOptions) {
   );
 }
 
-interface SnippetEditor {
-  code?: string;
+interface SnippetEditorProps {
+  value?: string;
+  onChange: EventListener;
   lang?: string;
 }
 
-const SnippetEditor = ({ code, lang = "" }: SnippetEditor) => {
-  const editorRef = useRef<any>(null);
+const SnippetEditor = ({ value = "", onChange, lang }: SnippetEditorProps) => {
+  const editorContainerRef = useRef<any>(null);
   const editor = useRef<ShikiCode | null>(null);
-  const [selectedLanguage, setSelectedLanguage] = useState(lang);
+  const [isInitializingEditor, setIsInitializingEditor] = useState(true);
+  const [isLoadLanguagePending, startLoadLangageTransition] = useTransition();
 
   useEffect(() => {
-    let ignore = true;
+    let ignore = false;
+
     async function initEditor() {
       // declare your theme and language
       const theme = SNIPPET_EDITOR_THEME;
-      const language = selectedLanguage;
+      const lang = SNIPPET_DEFAULT_LANGUAGE;
+      setIsInitializingEditor(true);
 
       // get the highlighter
-      const h = await getHighlighter({ langs: [language], themes: [theme] });
+      const h = await getHighlighter({ langs: [lang], themes: [theme] });
 
-      if (!ignore) {
+      if (ignore) {
         return;
       }
 
@@ -380,46 +386,63 @@ const SnippetEditor = ({ code, lang = "" }: SnippetEditor) => {
           // Normally it is not used unless you are building a playground like this
           autoload,
         )
-        .create(editorRef.current, h, {
-          // Optionally, you can pass some default value to the editor,
-          // such as
-          value: code,
-          language,
+        .create(editorContainerRef.current, h, {
+          value: "",
+          language: lang,
           theme,
           name: "code",
         });
+      setIsInitializingEditor(false);
     }
 
     initEditor();
 
     return () => {
-      ignore = false;
+      ignore = true;
       editor.current?.dispose();
     };
-  }, [code, selectedLanguage]);
+  }, []);
+
+  useEffect(() => {
+    if (!isInitializingEditor && editor?.current) {
+      startLoadLangageTransition(async () => {
+        if (editor?.current) {
+          await editor.current.highlighter.loadLanguage(lang as any);
+          editor.current.updateOptions({
+            language: lang,
+          });
+        }
+      });
+    }
+  }, [isInitializingEditor, lang]);
+
+  useEffect(() => {
+    if (!isInitializingEditor && editor?.current) {
+      editor.current.input.addEventListener("input", onChange);
+
+      return () => {
+        editor?.current?.input.removeEventListener("input", onChange);
+      };
+    }
+  }, [isInitializingEditor, onChange]);
+
+  useEffect(() => {
+    if (!isInitializingEditor && editor?.current) {
+      editor.current.value = value;
+    }
+  }, [isInitializingEditor, value]);
 
   return (
-    <div>
-      <div ref={editorRef} className={styles.editor}>
-        <header>
-          <select
-            className="text-black"
-            required
-            name="lang"
-            value={selectedLanguage}
-            id="lang_list"
-            onChange={(e) => {
-              setSelectedLanguage(e.target.value);
-            }}
-          >
-            {bundledLanguagesInfo.map((language) => (
-              <option key={language.id} value={language.id}>
-                {language.name}
-              </option>
-            ))}
-          </select>
-          {/* <select id="theme_list"></select> */}
-        </header>
+    <div className="flex flex-col">
+      <div
+        ref={editorContainerRef}
+        className={cn(styles.editor, "overflow-hidden rounded-md")}
+      >
+        {isInitializingEditor && <Skeleton className="h-full w-full" />}
+        {/* <header>
+          <select id="lang_list"></select>
+          <select id="theme_list"></select>
+        </header> */}
         {/* <footer className="editor-footer"></footer> */}
       </div>
     </div>

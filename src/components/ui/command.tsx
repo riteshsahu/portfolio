@@ -3,10 +3,11 @@
 import * as React from "react";
 import { type DialogProps } from "@radix-ui/react-dialog";
 import { Command as CommandPrimitive } from "cmdk";
-import { Search } from "lucide-react";
+import { Search, WholeWord } from "lucide-react";
 
 import { cn } from "@/utils";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Toggle } from "@/components/ui/toggle";
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
@@ -37,10 +38,16 @@ const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
   );
 };
 
+interface CommandInputProps {
+  isExactMatch?: boolean;
+  onToggleExactMatch?: () => void;
+}
+
 const CommandInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
-  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input> &
+    CommandInputProps
+>(({ className, isExactMatch, onToggleExactMatch, ...props }, ref) => (
   <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
     <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
     <CommandPrimitive.Input
@@ -51,6 +58,16 @@ const CommandInput = React.forwardRef<
       )}
       {...props}
     />
+    {typeof onToggleExactMatch === "function" && (
+      <Toggle
+        size={"sm"}
+        pressed={isExactMatch}
+        onPressedChange={onToggleExactMatch}
+        aria-label="Toggle exact match"
+      >
+        <WholeWord className="h-4 w-4" />
+      </Toggle>
+    )}
   </div>
 ));
 

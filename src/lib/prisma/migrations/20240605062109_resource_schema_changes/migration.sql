@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Resource" ADD COLUMN     "title" TEXT,
+ALTER COLUMN "name" DROP NOT NULL,
+ALTER COLUMN "image" DROP NOT NULL,
+ALTER COLUMN "link" DROP NOT NULL,
+ALTER COLUMN "description" DROP NOT NULL;
