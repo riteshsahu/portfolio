@@ -5,8 +5,8 @@ export default async function AddSnippetPage() {
   const categories = await prisma.snippetCategory.findMany();
 
   return (
-    <main className="min-h-screen p-6">
+    <div className="h-full p-6 pb-0">
       <SnippetForm categories={categories} />
-    </main>
+    </div>
   );
 }

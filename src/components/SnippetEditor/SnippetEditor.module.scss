@@ -1,5 +1,6 @@
 .editor {
-  height: 600px;
+  height: 100%;
+  min-height: 450px;
   margin-top: var(--header-height);
   --editor-padding: 1rem 0px;
   --line-number-width: 4.5em;
@@ -33,6 +34,32 @@
   color: transparent;
   caret-color: var(--fg, black);
   white-space: pre;
+  --sb-track-color: #232e33;
+  --sb-thumb-color: #3f4954;
+  --sb-size: 10px;
+
+  &::-webkit-scrollbar {
+    width: var(--sb-size);
+    cursor: default;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 3px;
+    cursor: default;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 3px;
+    cursor: default;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    & {
+      scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    }
+  }
 
   position: absolute;
   margin: 0;

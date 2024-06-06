@@ -10,6 +10,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { truncate } from "lodash";
 
 function CommonBreadcrumbs() {
   const pathname = usePathname();
@@ -20,13 +21,17 @@ function CommonBreadcrumbs() {
       <BreadcrumbList>
         {segments.map((segment, idx) => {
           const isLast = idx === segments.length - 1;
+          const _segment = truncate(segment, {
+            length: 25,
+            separator: "-",
+          });
 
           return (
             <React.Fragment key={segment}>
               {isLast ? (
                 <BreadcrumbItem>
                   <BreadcrumbPage className="capitalize">
-                    {segment}
+                    {_segment}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               ) : (
@@ -37,7 +42,7 @@ function CommonBreadcrumbs() {
                         className="capitalize"
                         href={`/${segments.slice(0, idx + 1).join("/")}` as any}
                       >
-                        {segment}
+                        {_segment}
                       </Link>
                     </BreadcrumbLink>
                   </BreadcrumbItem>

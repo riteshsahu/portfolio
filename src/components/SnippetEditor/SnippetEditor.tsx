@@ -347,9 +347,15 @@ interface SnippetEditorProps {
   value?: string;
   onChange: EventListener;
   lang?: string;
+  className?: string;
 }
 
-const SnippetEditor = ({ value = "", onChange, lang }: SnippetEditorProps) => {
+const SnippetEditor = ({
+  value = "",
+  onChange,
+  lang,
+  className,
+}: SnippetEditorProps) => {
   const editorContainerRef = useRef<any>(null);
   const editor = useRef<ShikiCode | null>(null);
   const [isInitializingEditor, setIsInitializingEditor] = useState(true);
@@ -433,7 +439,7 @@ const SnippetEditor = ({ value = "", onChange, lang }: SnippetEditorProps) => {
   }, [isInitializingEditor, value]);
 
   return (
-    <div className="flex flex-col">
+    <div className={cn("flex flex-col", className)}>
       <div
         ref={editorContainerRef}
         className={cn(styles.editor, "overflow-hidden rounded-md")}
