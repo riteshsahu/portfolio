@@ -7,7 +7,7 @@ async function SnippetsList() {
   });
 
   return (
-    <div>
+    <div className="space-y-5">
       {snippets.map((snippet) => (
         <SnippetPreview key={snippet.id} {...snippet} />
       ))}

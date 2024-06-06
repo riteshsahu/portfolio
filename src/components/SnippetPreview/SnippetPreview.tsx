@@ -50,13 +50,13 @@ async function SnippetPreview({
         />
       </CardHeader>
       <CardContent>
-        <div className="relative">
+        <div className="group relative">
           <div
             id={snippetId}
             className={styles.codeContainer}
             dangerouslySetInnerHTML={{ __html: html }}
           />
-          <div className="absolute right-0 top-0 p-2">
+          <div className="absolute right-0 top-0 hidden p-2 group-hover:block">
             <CopySnippetButton className="text-white" snippetId={snippetId} />
           </div>
         </div>
