@@ -22,6 +22,9 @@ export const ROUTE_PATH = {
   ADD_RESOURCE_CATEGORY: "/dashboard/resources/categories/add",
   VIEW_RESOURCE_CATEGORY: "/dashboard/resources/categories/[slug]",
   UPDATE_RESOURCE_CATEGORY: "/dashboard/resources/categories/[slug]/update",
+
+  PUBLIC_SNIPPETS: "/snippets",
+  PUBLIC_RESOURCES: "/resources",
 } as const;
 
 export const PUBLIC_ROUTES = [ROUTE_PATH.HOME, ROUTE_PATH.AUTH];

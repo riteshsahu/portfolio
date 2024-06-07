@@ -1,18 +1,17 @@
+import SnippetPreview from "@/components/SnippetPreview";
 import prisma from "@/lib/prisma";
-import SnippetPreview from "../SnippetPreview";
+import React from "react";
 
-async function SnippetsList() {
+export default async function SnippetsPage() {
   const snippets = await prisma.snippet.findMany({
     include: { category: true },
   });
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 p-4">
       {snippets.map((snippet) => (
         <SnippetPreview key={snippet.id} {...snippet} />
       ))}
     </div>
   );
 }
-
-export default SnippetsList;

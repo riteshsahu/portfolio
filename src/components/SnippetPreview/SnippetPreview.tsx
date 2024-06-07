@@ -9,14 +9,17 @@ import CopySnippetButton from "../CopySnippetButton";
 import styles from "./SnippetPreview.module.scss";
 import { deleteSnippet } from "@/lib/actions";
 
-interface SnippetPreviewProps extends Snippet {}
+interface SnippetPreviewProps extends Snippet {
+  showActions?: boolean;
+}
 
 async function SnippetPreview({
   title,
   code,
-  lang = "js",
+  lang,
   id,
   slug,
+  showActions = false,
 }: SnippetPreviewProps) {
   const highlighter = await getHighlighter(lang, SNIPPET_EDITOR_THEME);
 
@@ -31,23 +34,25 @@ async function SnippetPreview({
     <Card className="relative">
       <CardHeader className="flex flex-row items-center justify-between gap-3">
         <div>{title}</div>
-        <EntityActions
-          config={{
-            // view: {
-            //   path: getRoutePath(ROUTE_PATH.VIEW_SNIPPET, {
-            //     slug: slug,
-            //   }),
-            // },
-            update: {
-              path: getRoutePath(ROUTE_PATH.UPDATE_SNIPPET, {
-                slug: slug,
-              }),
-            },
-            delete: {
-              action: deleteSnippet.bind(null, id),
-            },
-          }}
-        />
+        {showActions && (
+          <EntityActions
+            config={{
+              // view: {
+              //   path: getRoutePath(ROUTE_PATH.VIEW_SNIPPET, {
+              //     slug: slug,
+              //   }),
+              // },
+              update: {
+                path: getRoutePath(ROUTE_PATH.UPDATE_SNIPPET, {
+                  slug: slug,
+                }),
+              },
+              delete: {
+                action: deleteSnippet.bind(null, id),
+              },
+            }}
+          />
+        )}
       </CardHeader>
       <CardContent>
         <div className="group relative">

@@ -1,28 +1,13 @@
 import CommonBreadcrumbs from "@/components/CommonBreadcrumbs";
+import MyAccountMenu from "@/components/MyAccountMenu";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Toaster } from "@/components/ui/sonner";
 import { ROUTE_PATH } from "@/constants";
-import { logout } from "@/lib/auth/actions";
-import {
-  CircleUser,
-  Code,
-  Menu,
-  Package2,
-  Search,
-  Shapes,
-  Tag,
-} from "lucide-react";
+import { Code, Menu, Package2, Search, Shapes, Tag } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -120,28 +105,7 @@ export default async function DashboardLayout({
             </form>
           </div>
           <ThemeToggle />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon" className="rounded-full">
-                <CircleUser className="h-5 w-5" />
-                <span className="sr-only">Toggle user menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <form action={logout}>
-                <DropdownMenuItem>
-                  <Button variant={"ghost"} type="submit">
-                    Logout
-                  </Button>
-                </DropdownMenuItem>
-              </form>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <MyAccountMenu />
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
           <CommonBreadcrumbs />
