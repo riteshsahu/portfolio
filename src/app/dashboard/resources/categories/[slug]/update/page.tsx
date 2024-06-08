@@ -2,7 +2,15 @@ import ResourceCategoryForm from "@/components/ResourceCategoryForm";
 import prisma from "@/lib/prisma";
 import React from "react";
 
-export default async function UpdateResourceCategory({ params }) {
+interface UpdateResourceCategoryProps {
+  params: {
+    slug: string;
+  };
+}
+
+export default async function UpdateResourceCategory({
+  params,
+}: UpdateResourceCategoryProps) {
   const { slug } = params;
   const category = await prisma.resourceCategory.findFirst({
     where: { slug },

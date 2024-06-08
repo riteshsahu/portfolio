@@ -1,7 +1,13 @@
 import SnippetCategoryForm from "@/components/SnippetCategoryForm";
 import prisma from "@/lib/prisma";
 
-export default async function UpdateSnippetCategory({ params }) {
+interface UpdateSnippetCategoryProps {
+  params: { slug: string };
+}
+
+export default async function UpdateSnippetCategory({
+  params,
+}: UpdateSnippetCategoryProps) {
   const { slug } = params;
   const category = await prisma.snippetCategory.findFirst({
     where: { slug },

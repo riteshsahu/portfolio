@@ -1,8 +1,13 @@
 import ResourceForm from "@/components/ResourceForm";
 import prisma from "@/lib/prisma";
-import React from "react";
 
-export default async function UpdateResource({ params }) {
+interface UpdateResourceProps {
+  params: {
+    slug: string;
+  };
+}
+
+export default async function UpdateResource({ params }: UpdateResourceProps) {
   const { slug } = params;
   const resource = await prisma.resource.findFirst({
     where: { slug },
@@ -18,7 +23,7 @@ export default async function UpdateResource({ params }) {
     <div className="my-auto flex flex-col items-center justify-center">
       <ResourceForm
         categories={categories}
-        defaultValues={resource}
+        defaultValues={resource as any}
         slug={slug}
       />
     </div>

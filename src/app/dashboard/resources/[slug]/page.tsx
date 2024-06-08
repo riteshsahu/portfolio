@@ -1,7 +1,13 @@
 import prisma from "@/lib/prisma";
 import React from "react";
 
-export default async function ResourceDetail({ params }) {
+interface ResourceDetailProps {
+  params: {
+    slug: string;
+  };
+}
+
+export default async function ResourceDetail({ params }: ResourceDetailProps) {
   const { slug } = params;
   const resource = await prisma.resource.findFirst({
     where: { slug },
