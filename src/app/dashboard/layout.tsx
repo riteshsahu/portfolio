@@ -3,11 +3,10 @@ import MyAccountMenu from "@/components/MyAccountMenu";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Toaster } from "@/components/ui/sonner";
 import { ROUTE_PATH } from "@/constants";
-import { Code, Menu, Package2, Search, Shapes, Tag } from "lucide-react";
+import { Code, Menu, Package2, Shapes, Tag } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -92,18 +91,7 @@ export default async function DashboardLayout({
               <div className="mt-auto"></div>
             </SheetContent>
           </Sheet>
-          <div className="w-full flex-1">
-            <form>
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="Search products..."
-                  className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
-                />
-              </div>
-            </form>
-          </div>
+          <div className="w-full flex-1"></div>
           <ThemeToggle />
           <MyAccountMenu />
         </header>

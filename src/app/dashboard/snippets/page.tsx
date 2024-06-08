@@ -1,5 +1,6 @@
-import SnippetPreview from "@/components/SnippetPreview";
+import { columns } from "./columns";
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
 import { ROUTE_PATH } from "@/constants";
 import { getAuth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
@@ -9,7 +10,13 @@ import Link from "next/link";
 export default async function Home() {
   const auth = await getAuth();
   const snippets = await prisma.snippet.findMany({
-    include: { category: true },
+    include: {
+      category: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
 
   return (
@@ -26,9 +33,11 @@ export default async function Home() {
       </div>
       <div className="mb-5" />
       <div className="space-y-5">
-        {snippets.map((snippet) => (
+        <DataTable columns={columns} data={snippets} />
+
+        {/* {snippets.map((snippet) => (
           <SnippetPreview showActions={true} key={snippet.id} {...snippet} />
-        ))}
+        ))} */}
       </div>
     </div>
   );

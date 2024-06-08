@@ -51,5 +51,5 @@ model ResourceCategory {
   name      String
   slug      String     @unique
   createdAt DateTime   @default(now())
-  devTools  Resource[]
+  resources Resource[]
 }

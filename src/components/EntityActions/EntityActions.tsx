@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Edit, Eye, MoreVertical, Trash } from "lucide-react";
+import { Edit, Eye, MoreHorizontal, Trash } from "lucide-react";
 import Link from "next/link";
 
 import Loader from "@/components/Loader";
@@ -24,7 +24,15 @@ import {
 import { isEmpty } from "lodash";
 import React, { useTransition } from "react";
 
-function EntityActions({ config }) {
+interface EntityActionsProps {
+  config: {
+    view?: any;
+    update?: any;
+    delete?: any;
+  };
+}
+
+function EntityActions({ config }: EntityActionsProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -45,7 +53,7 @@ function EntityActions({ config }) {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
             <span className="sr-only">Open menu</span>
-            <MoreVertical className="h-4 w-4" />
+            <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
