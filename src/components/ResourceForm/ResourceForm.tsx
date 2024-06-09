@@ -156,86 +156,25 @@ function ResourceForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full max-w-[400px] space-y-8"
+        className="grid w-full grid-cols-1 gap-8 sm:grid-cols-2"
       >
+        {!!error && (
+          <FormMessage className="sm:col-span-2">{error}</FormMessage>
+        )}
+
         <FormField
           control={form.control}
           name="url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex items-center gap-2">
+              <FormLabel className="flex items-center">
                 Resource Link
-                {isFethingMetaData && <Loader size={12} />}
+                {isFethingMetaData && (
+                  <Loader className="order-2 ml-2" size={12} />
+                )}
               </FormLabel>
               <FormControl>
                 <Input required placeholder="Enter resource link" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input required placeholder="Enter name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter title" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="icon"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Icon Link</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter icon link" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="image"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Image Link</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter image link" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Enter description" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -341,8 +280,82 @@ function ResourceForm({
           )}
         />
 
-        {!!error && <FormMessage>{error}</FormMessage>}
-        <Button className="min-w-[117px]" disabled={isPending} type="submit">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input required placeholder="Enter name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Title</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter title" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="icon"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Icon Link</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter icon link" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="image"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Image Link</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter image link" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem className="sm:col-span-2">
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  className="sm:min-h-[100px]"
+                  placeholder="Enter description"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button
+          className="min-w-[117px] place-self-end sm:col-span-2"
+          disabled={isPending}
+          type="submit"
+        >
           {isPending ? "Submitting..." : "Submit"}
         </Button>
       </form>

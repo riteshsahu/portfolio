@@ -74,3 +74,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+label:has(+ input:required) {
+  &::after {
+    content: "*";
+    margin-left: 3px;
+    @apply text-destructive;
+  }
+}

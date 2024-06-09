@@ -20,7 +20,7 @@ export default async function UpdateResource({ params }: UpdateResourceProps) {
   }
 
   return (
-    <div className="my-auto flex flex-col items-center justify-center">
+    <div className="my-auto flex flex-col items-center justify-center pb-5">
       <ResourceForm
         categories={categories}
         defaultValues={resource as any}

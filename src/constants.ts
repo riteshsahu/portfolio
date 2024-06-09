@@ -27,7 +27,12 @@ export const ROUTE_PATH = {
   PUBLIC_RESOURCES: "/resources",
 } as const;
 
-export const PUBLIC_ROUTES = [ROUTE_PATH.HOME, ROUTE_PATH.AUTH];
+export const PUBLIC_ROUTES = [
+  ROUTE_PATH.HOME,
+  ROUTE_PATH.AUTH,
+  ROUTE_PATH.PUBLIC_SNIPPETS,
+  ROUTE_PATH.PUBLIC_RESOURCES,
+];
 
 export const SNIPPET_EDITOR_THEME = "one-dark-pro";
 export const SNIPPET_DEFAULT_LANGUAGE = "javascript";
