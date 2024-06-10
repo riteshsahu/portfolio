@@ -1,16 +1,24 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SNIPPET_EDITOR_THEME } from "@/constants";
-import { Snippet } from "@prisma/client";
+import { Snippet, SnippetCategory } from "@prisma/client";
 import { cache } from "react";
 import { getHighlighter as shikiGetHighlighter } from "shiki/bundle/web";
 import CopySnippetButton from "../CopySnippetButton";
 import styles from "./SnippetPreview.module.scss";
+import { Badge } from "@/components/ui/badge";
 
 interface SnippetPreviewProps extends Snippet {
   showActions?: boolean;
+  category?: SnippetCategory;
 }
 
-async function SnippetPreview({ title, code, lang, id }: SnippetPreviewProps) {
+async function SnippetPreview({
+  title,
+  code,
+  lang,
+  id,
+  category,
+}: SnippetPreviewProps) {
   const highlighter = await getHighlighter(lang, SNIPPET_EDITOR_THEME);
 
   const html = highlighter.codeToHtml(code, {
@@ -24,6 +32,7 @@ async function SnippetPreview({ title, code, lang, id }: SnippetPreviewProps) {
     <Card className="relative">
       <CardHeader className="flex flex-row items-center justify-between gap-3">
         <div>{title}</div>
+        {category?.name && <Badge>{category.name}</Badge>}
       </CardHeader>
       <CardContent>
         <div className="group relative">

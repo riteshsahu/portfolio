@@ -10,6 +10,7 @@ import { getRoutePath } from "@/helpers/route.helpers";
 import { deleteSnippet } from "@/lib/actions";
 import { Snippet } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 
 export const columns: ColumnDef<Snippet>[] = [
   getSelectColumn<Snippet>(),
@@ -18,6 +19,17 @@ export const columns: ColumnDef<Snippet>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Title" />
     ),
+    cell: ({ row }) => {
+      return (
+        <Link
+          href={getRoutePath(ROUTE_PATH.VIEW_SNIPPET, {
+            slug: row.original.slug,
+          })}
+        >
+          {row.original.title}
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "lang",
