@@ -18,7 +18,7 @@ async function UpdateSnippetPage({ params }: UpdateSnippetPageProps) {
 
   return (
     <main className="min-h-screen p-6">
-      <SnippetForm defaultValues={snippet} categories={categories} />
+      <SnippetForm defaultValues={snippet as any} categories={categories} />
     </main>
   );
 }
