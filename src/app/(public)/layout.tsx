@@ -9,6 +9,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ROUTE_PATH } from "@/constants";
 import { ReactNode } from "react";
 import { getAuth } from "@/lib/auth";
+import Logo from "@/components/Logo";
 
 const navLinks = [
   {
@@ -30,11 +31,10 @@ export default async function PublicLayout({
     <div className="flex min-h-dvh flex-col">
       <header className=" top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
         <Link
-          href="#"
+          href={ROUTE_PATH.HOME}
           className="flex items-center gap-2 text-lg font-semibold md:text-base"
         >
-          Logo
-          <span className="sr-only">Brand Name</span>
+          <Logo />
         </Link>
         <nav className="hidden flex-1 flex-col justify-center gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           {navLinks.map((link) => (

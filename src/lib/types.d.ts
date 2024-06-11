@@ -1,4 +1,4 @@
-import { Resource } from "@prisma/client";
+import { Resource, Snippet } from "@prisma/client";
 
 export type ServerResponse = {
   message?: string;
@@ -11,12 +11,7 @@ export type AuthFormInputs = {
   password: string;
 };
 
-export type AddSnippetFormInputs = {
-  title: string;
-  code: string;
-  lang: string;
-  categoryId: string;
-};
+export type AddSnippetFormInputs = NoUndefinedField<Snippet>;
 
 type NoUndefinedField<T> = {
   [P in keyof T]-?: NoUndefinedField<NonNullable<T[P]>>;

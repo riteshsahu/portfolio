@@ -24,6 +24,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Textarea } from "@/components/ui/textarea";
 import { SNIPPET_DEFAULT_LANGUAGE } from "@/constants";
 import { upsertSnippet } from "@/lib/actions";
 import { AddSnippetFormInputs } from "@/lib/types";
@@ -49,6 +50,7 @@ function SnippetForm({ categories, defaultValues, slug }: SnippetFormProps) {
       title: "",
       lang: SNIPPET_DEFAULT_LANGUAGE,
       code: "",
+      description: "",
       categoryId: "",
       ...defaultValues,
     },
@@ -156,6 +158,24 @@ function SnippetForm({ categories, defaultValues, slug }: SnippetFormProps) {
             )}
           />
         </div>
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem className="sm:col-span-2">
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  className="sm:min-h-[80px]"
+                  placeholder="Enter description"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <div className="relative flex flex-1 flex-col">
           <FormField

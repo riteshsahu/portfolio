@@ -1,4 +1,10 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { SNIPPET_EDITOR_THEME } from "@/constants";
 import { Snippet, SnippetCategory } from "@prisma/client";
 import { cache } from "react";
@@ -18,6 +24,7 @@ async function SnippetPreview({
   lang,
   id,
   category,
+  description,
 }: SnippetPreviewProps) {
   const highlighter = await getHighlighter(lang, SNIPPET_EDITOR_THEME);
 
@@ -31,7 +38,10 @@ async function SnippetPreview({
   return (
     <Card className="relative">
       <CardHeader className="flex flex-row items-center justify-between gap-3">
-        <div>{title}</div>
+        <div>
+          <CardTitle className="text-xl">{title}</CardTitle>
+          <CardDescription className="text-base">{description}</CardDescription>
+        </div>
         {category?.name && <Badge>{category.name}</Badge>}
       </CardHeader>
       <CardContent>

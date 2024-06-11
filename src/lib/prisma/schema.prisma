@@ -15,14 +15,15 @@ datasource db {
 }
 
 model Snippet {
-  id         String          @id @default(uuid())
-  slug       String          @unique
-  category   SnippetCategory @relation(fields: [categoryId], references: [id])
-  categoryId String
-  title      String
-  code       String
-  lang       String
-  createdAt  DateTime        @default(now())
+  id          String          @id @default(uuid())
+  slug        String          @unique
+  category    SnippetCategory @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  title       String
+  description String?         @default("")
+  code        String
+  lang        String
+  createdAt   DateTime        @default(now())
 }
 
 model SnippetCategory {
